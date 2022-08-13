@@ -29,5 +29,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   background: var(--background);
   height: 100vh;
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
 }
 </style>

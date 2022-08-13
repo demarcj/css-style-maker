@@ -1,3 +1,5 @@
 <template>
-  <section id="layers" class="layers"></section>
+  <section id="layers" class="layers">
+
+  </section>
 </template>

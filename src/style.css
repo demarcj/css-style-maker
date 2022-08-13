@@ -11,3 +11,9 @@
 body{ font-size: 1.8rem; }
 a{ text-decoration: none; color: inherit;}
 ul{ list-style: none; }
+
+/* This is here temporarily  */
+.layer{
+  display: flex;
+  gap: 1.5rem;
+}
