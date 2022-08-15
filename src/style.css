@@ -13,7 +13,11 @@ a{ text-decoration: none; color: inherit;}
 ul{ list-style: none; }
 
 /* This is here temporarily  */
-.layer{
-  display: flex;
-  gap: 1.5rem;
+.row{
+  display: grid;
+  grid-template-columns: 75px 1fr;
+  grid-template-rows: initial;
+}
+.cell{
+  padding: 5px 15px;
 }

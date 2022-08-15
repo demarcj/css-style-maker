@@ -16,7 +16,11 @@
       </li>
       <li>Style</li>
       <li>Animation</li>
-      <li>Help</li>
+      <li>Help
+        <ul class="menu_lvl2">
+          <li @click="about">About...</li>
+        </ul>
+      </li>
     </ul>
   </header>
 </template>
@@ -24,21 +28,15 @@
   export default {
     methods:{
       new_text() {
-        const text_layer = prompt(`Name This Layer`);
-        const layers = document.querySelector("#layers");
-        layers.innerHTML += `
-          <div class="layer">
-            <div class="index">${layers.childElementCount}</div>
-            <div class="layer_name">${text_layer}</div>
-          </div>
-        `;
-        document.querySelector("#canvas").innerHTML += `<div id="${text_layer + layers.childElementCount}" contenteditable="true">${text_layer}</div>`;
+        this.$emit('new-text');
       },
       export_animation() {
         const animation = new Blob([document.querySelector("#canvas").innerHTML], {type: 'text/html'});
-        console.log(document.querySelector("#canvas"))
         document.querySelector("#export").download = "animation.html";
         document.querySelector("#export").href = window.URL.createObjectURL(animation);
+      },
+      about() {
+        alert(`Still early, but I promise to add to this about ;)`)
       }
     }
   }
