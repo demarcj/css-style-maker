@@ -1,5 +1,7 @@
 <template>
-  <div class="element" contenteditable="true">{{ element }}</div> 
+  <div class="layer">
+    <div class="element" contenteditable="true">{{ element }}</div> 
+  </div>
 </template>
 <script>
 export default {

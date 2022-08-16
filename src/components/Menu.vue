@@ -2,20 +2,25 @@
   <header>
     <ul id="menu" class="menu">
       <li>
-        File
+        Project
         <ul class="menu_lvl2">
+          <li @click="new_project">New Project</li>
           <li @click="export_animation"><a id="export">Export</a></li>
         </ul>
       </li>
-      <li>Edit</li>
+      <li>Edit
+        <ul class="menu_lvl2">
+        </ul>
+      </li>
       <li>
         Element
         <ul class="menu_lvl2">
           <li @click="new_text">New Text</li>
         </ul>
       </li>
-      <li>Style</li>
-      <li>Animation</li>
+      <!-- <li>Style</li> -->
+      <!-- <li>Animation</li> -->
+      <!-- <li>Window</li> -->
       <li>Help
         <ul class="menu_lvl2">
           <li @click="about">About...</li>
@@ -27,23 +32,27 @@
 <script>
   export default {
     methods:{
-      new_text() {
-        this.$emit('new-text');
-      },
       export_animation() {
         const animation = new Blob([document.querySelector("#canvas").innerHTML], {type: 'text/html'});
         document.querySelector("#export").download = "animation.html";
         document.querySelector("#export").href = window.URL.createObjectURL(animation);
       },
+      new_project() {
+        this.$emit('new-project');
+      },
+      new_text() {
+        this.$emit('new-text');
+      },
       about() {
-        alert(`Still early, but I promise to add to this about ;)`)
+        alert(`Still early, but I promise to add to this about ;)`);
       }
     }
   }
 </script>
 <style scoped>
   header{
-    background:white
+    background: var(--background);
+    border-bottom: 1px solid white;
   }
   .menu{
     display: flex;
@@ -53,13 +62,13 @@
     padding: 10px;
     position: relative;
     cursor: pointer;
-    color: #000;
+    color: white;
     white-space: nowrap;
   }
   .menu_lvl2{
     display: none;
     position: absolute;
-    background: #fff;
+    background: var(--background);
     left: 0;
   }
   #menu>li:hover>.menu_lvl2{display: block;}
