@@ -1,23 +1,8 @@
 # css-style-maker
 
-## Project setup
+## To Do
 ```
-yarn install
-```
-
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
-
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
+Replace the order for id in layer
 ```
 
 ### Customize configuration

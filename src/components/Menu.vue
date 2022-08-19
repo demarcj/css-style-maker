@@ -10,6 +10,10 @@
       </li>
       <li>Edit
         <ul class="menu_lvl2">
+          <!-- <li>Undo</li>
+          <li>Redo</li>
+          <li>History</li> -->
+          <li @click="delete_layers">Delete Element</li>
         </ul>
       </li>
       <li>
@@ -42,6 +46,9 @@
       },
       new_text() {
         this.$emit('new-text');
+      },
+      delete_layers() {
+        this.$emit('delete-layers');
       },
       about() {
         alert(`Still early, but I promise to add to this about ;)`);
