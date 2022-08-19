@@ -2,7 +2,7 @@
   <div 
     class="row"
     v-bind:class="{selected: selected}"
-    @click="select_layers()" 
+    @click="select_layers" 
   >
     <div class="cell">{{ index }}</div> 
     <div class="cell">{{ layer }}</div>
@@ -13,7 +13,7 @@ export default {
   props: ['id', 'layer', 'index', 'selected'],
   methods: {
     select_layers() {
-      const selected = !this.is_selected;
+      const selected = !this.selected;
       if(selected){
         this.$emit('select-layers', this.id);
       }
