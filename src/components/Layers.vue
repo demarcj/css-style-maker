@@ -20,6 +20,7 @@ export default {
       if(!selected){
         this.$emit('deselect-layers', this.id);
       }
+      this.$emit('display-data', this.id);
     }
   }
 }
@@ -40,7 +41,7 @@ export default {
   }
   .row.selected::before{
     content: "";
-    background-color: green;
+    background-color: var(--secondary);
     position: absolute;
     inset: 0 auto 0 0;
     width: 2px;

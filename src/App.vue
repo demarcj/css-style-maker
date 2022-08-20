@@ -3,16 +3,19 @@
   @new-text="new_text" 
   @new-project="new_project"
   @delete-layers="delete_layers"
+  @display-window="display_window"
 />
 <main class="main">
   <section id="canvas" class="canvas">
     <main-stage
-      v-for="element in objects" 
+      v-for="element in elements" 
       :key="element.index"
       :element="element.text"
     ></main-stage>
   </section>
-    <styling-stage></styling-stage>
+    <styling-stage 
+      :name="element_name"
+    ></styling-stage>
 </main>
 <section id="layers" class="layers">
   <div class="row table-header-row">
@@ -21,12 +24,12 @@
   </div>
   <div class="table-row">
     <layers 
-      v-for="layer in objects" 
-      :id="layer.id"
-      :key="layer.order"
-      :layer="layer.text"
-      :index="layer.index"
-      :selected="layer.selected"
+      v-for="element in elements" 
+      :id="element.id"
+      :key="element.order"
+      :layer="element.text"
+      :index="element.index"
+      :selected="element.selected"
       @select-layers="select_layers"
       @deselect-layers="deselect_layers"
     ></layers>
@@ -54,14 +57,16 @@ export default {
   },
   data() {
     return {
-      objects: {}
+      elements: {},
+      element_name: ``,
+      windows: {}
     }
   },
   methods: {
     new_project() {
       const confirm_new = confirm(`Are you sure you want to start a new project?`);
       if(confirm_new){
-        this.objects = {};
+        this.elements = {};
       }
     },
     new_text(message = `Name this element`) {
@@ -73,33 +78,46 @@ export default {
         return this.new_text(`Please enter a name in the input field or click cancel`);
       }
       const id = uuid().toString();
-      const size = Object.keys(this.objects).length ? Object.keys(this.objects).length : 0; 
-      this.objects[id] = {};
-      this.objects[id].id = id;
-      this.objects[id].name = text_layer;
-      this.objects[id].text = text_layer;
-      this.objects[id].index = size;
-      this.objects[id].selected = false;
+      const size = Object.keys(this.elements).length ? Object.keys(this.elements).length : 0; 
+      this.elements[id] = {};
+      this.elements[id].id = id;
+      this.elements[id].name = text_layer;
+      this.elements[id].text = text_layer;
+      this.elements[id].index = size;
+      this.elements[id].selected = false;
     },
     select_layers(id) {
-      this.objects[id].selected = true;
+      this.elements[id].selected = true;
+      this.get_element_data();
     },
     deselect_layers(id) {
-      this.objects[id].selected = false;
+      this.elements[id].selected = false;
+      this.get_element_data();
+    },
+    get_element_data() {
+      const find_select = Object.keys(this.elements).filter(id => this.elements[id].selected);
+      if(find_select.length === 1) {
+        this.element_name = this.elements[find_select].name;
+        return;
+      }
+      this.element_name = ``;
     },
     delete_layers() {
-      Object.keys(this.objects).forEach(id => {
-        if(this.objects[id].selected){
-          delete this.objects[id]
+      Object.keys(this.elements).forEach(id => {
+        if(this.elements[id].selected){
+          delete this.elements[id]
         }
       });
       this.resort_index();
     },
     resort_index() {
-      if(!Object.keys(this.objects).length){
+      if(!Object.keys(this.elements).length){
         return;
       }
-      Object.keys(this.objects).forEach((id, index) => this.objects[id].index = index);
+      Object.keys(this.elements).forEach((id, index) => this.elements[id].index = index);
+    },
+    display_window() {
+      console.log(`not yet`)
     }
   }
 }
