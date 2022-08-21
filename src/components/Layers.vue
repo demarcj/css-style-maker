@@ -1,49 +1,75 @@
-<template>
-  <div 
-    class="row"
-    v-bind:class="{selected: selected}"
-    @click="select_layers" 
-  >
-    <div class="cell">{{ index }}</div> 
-    <div class="cell">{{ layer }}</div>
+<template v-if="elements">
+<section id="layers" class="layers">
+  <div class="row table-header-row">
+    <div class="cell table-header">Index</div>
+    <div class="cell table-header">Element / Layer Name</div>
   </div>
+  <div class="table-row">
+    <div 
+      class="row"
+      v-for="element in elements"
+      :key="element.id"
+      :class="{selected: element.selected}"
+      @click="select_layers( element.id )" 
+    >
+      <div class="cell">{{ element.index }}</div> 
+      <div class="cell">{{ element.name }}</div>
+    </div>
+  </div>
+</section>
 </template>
 <script>
 export default {
-  props: ['id', 'layer', 'index', 'selected'],
+  props: ['elements'],
   methods: {
-    select_layers() {
-      const selected = !this.selected;
+    select_layers(id) {
+      const selected = !this.elements[id].selected;
       if(selected){
-        this.$emit('select-layers', this.id);
+        this.$emit('select-layers', id);
       }
       if(!selected){
-        this.$emit('deselect-layers', this.id);
+        this.$emit('deselect-layers', id);
       }
-      this.$emit('display-data', this.id);
+      this.$emit('display-data', id);
     }
   }
 }
 </script>
 <style scoped>
-  .divider{
-    background-color: black;
-    height: 1px;
-  }
-  .row:nth-child(odd) {
-    background-color: #3c3c3c;
-  }
-  .cell{
-    cursor: pointer;
-  }
-  .row.selected{
-    position: relative;
-  }
-  .row.selected::before{
-    content: "";
-    background-color: var(--secondary);
-    position: absolute;
-    inset: 0 auto 0 0;
-    width: 2px;
-  }
+.layers{
+  border-top: 1px solid white;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+.divider{
+  background-color: black;
+  height: 1px;
+}
+.row:nth-child(odd) {
+  background-color: #3c3c3c;
+}
+.cell{
+  cursor: pointer;
+}
+.row.selected{
+  position: relative;
+}
+.row.selected::before{
+  content: "";
+  background-color: var(--secondary);
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 2px;
+}
+.table-header-row{
+  border-bottom: 1px solid white;
+}
+.table-header{
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.table-row{
+  overflow-y: scroll;
+}
 </style>

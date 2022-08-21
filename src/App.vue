@@ -1,40 +1,25 @@
 <template>
 <Menu 
-  @new-text="new_text" 
+  :selected_element="selected_element"
   @new-project="new_project"
+  @new-text="new_text" 
+  @set-style="set_style"
   @delete-layers="delete_layers"
   @display-window="display_window"
 />
 <main class="main">
-  <section id="canvas" class="canvas">
-    <main-stage
-      v-for="element in elements" 
-      :key="element.index"
-      :element="element.text"
-    ></main-stage>
-  </section>
-    <styling-stage 
-      :name="element_name"
-    ></styling-stage>
+  <main-stage
+    :elements="elements"
+  ></main-stage>
+  <styling-stage 
+    :selected_element="selected_element"
+  ></styling-stage>
 </main>
-<section id="layers" class="layers">
-  <div class="row table-header-row">
-    <div class="cell table-header">Index</div>
-    <div class="cell table-header">Element / Layer Name</div>
-  </div>
-  <div class="table-row">
-    <layers 
-      v-for="element in elements" 
-      :id="element.id"
-      :key="element.order"
-      :layer="element.text"
-      :index="element.index"
-      :selected="element.selected"
-      @select-layers="select_layers"
-      @deselect-layers="deselect_layers"
-    ></layers>
-  </div>
-</section>
+<layers
+  :elements="elements"
+  @select-layers="select_layers"
+  @deselect-layers="deselect_layers"
+></layers>
 <Footer />
 </template>
 
@@ -58,7 +43,7 @@ export default {
   data() {
     return {
       elements: {},
-      element_name: ``,
+      selected_element: {},
       windows: {}
     }
   },
@@ -82,9 +67,22 @@ export default {
       this.elements[id] = {};
       this.elements[id].id = id;
       this.elements[id].name = text_layer;
+      this.elements[id].class_name = this.get_class_name(text_layer);
       this.elements[id].text = text_layer;
       this.elements[id].index = size;
+      this.elements[id].style_list = {};
       this.elements[id].selected = false;
+    },
+    get_class_name(txt) {
+      return txt.replaceAll(` `, `-`)
+    },
+    set_style(id, style) {
+      const value = prompt(`Type in the ${style}`);
+      if(value === null){
+        return;
+      }
+      this.elements[id].style_list[style] = value + `px`;
+      this.selected_element.style_list[style] = value + `px`;
     },
     select_layers(id) {
       this.elements[id].selected = true;
@@ -95,12 +93,15 @@ export default {
       this.get_element_data();
     },
     get_element_data() {
-      const find_select = Object.keys(this.elements).filter(id => this.elements[id].selected);
-      if(find_select.length === 1) {
-        this.element_name = this.elements[find_select].name;
+      if(!this.elements){
         return;
       }
-      this.element_name = ``;
+      const find_select = Object.keys(this.elements).filter(id => this.elements[id].selected);
+      if(find_select.length === 1) {
+        this.selected_element = this.elements[find_select];
+        return;
+      }
+      this.selected_element = {};
     },
     delete_layers() {
       Object.keys(this.elements).forEach(id => {
@@ -109,6 +110,7 @@ export default {
         }
       });
       this.resort_index();
+      this.get_element_data();
     },
     resort_index() {
       if(!Object.keys(this.elements).length){
@@ -143,21 +145,5 @@ export default {
   height: 500px;
   color: black;
   background-color: white;
-}
-.layers{
-  border-top: 1px solid white;
-  overflow: hidden;
-  display: grid;
-  grid-template-rows: auto 1fr;
-}
-.table-header-row{
-  border-bottom: 1px solid white;
-}
-.table-header{
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-.table-row{
-  overflow-y: scroll;
 }
 </style>

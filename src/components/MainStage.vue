@@ -1,11 +1,33 @@
-<template>
-  <div class="layer">
-    <div class="element" contenteditable="true">{{ element }}</div> 
+<template v-if="elements">
+<section id="canvas" class="canvas">
+  <div 
+    v-for="element in elements"
+    class="element-container" 
+    :class="element.class_name"
+    :key="element.id"
+  >
+    <div class="element" :style="parseStyling(element.style_list)" contenteditable="true">{{ element.text }}</div> 
   </div>
+</section>
 </template>
 <script>
 export default {
-  props: ['element']
+  props: ['elements'],
+  methods: {
+    parseStyling(style_list) {
+      console.log(style_list);
+      if(!style_list){
+        return [];
+      }
+      const stylings = Object.keys(style_list).map(style => {
+        const obj = {};
+        obj[style] = style_list[style];
+        return obj;
+      });
+      console.log(stylings)
+      return stylings;
+    }
+  }
 }
 </script>
 <style scoped>
