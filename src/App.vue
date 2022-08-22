@@ -4,6 +4,7 @@
     :selected_element="selected_element"
     @new-project="new_project"
     @new-text="new_text" 
+    @export-stylings="export_stylings"
     @delete-layers="delete_layers"
     @display-window="display_window"
     @set-style="set_style"
@@ -54,6 +55,33 @@ export default {
       if(confirmation){
         this.elements = {};
       }
+    },
+    export_stylings() {
+      const parse_css = this.parse_css();
+      const animation = new Blob([parse_css, document.querySelector("#canvas").innerHTML], {type: 'text/html'});
+      document.querySelector("#export").download = "animation.html";
+      document.querySelector("#export").href = window.URL.createObjectURL(animation);
+    },
+    parse_css() {
+      const parse_css = Object.keys(this.elements).map(id => {
+        const element = this.elements[id];
+        const name = `.${element.class_name}{\n`;
+        const stylings = Object.keys(element.style_list).map(style => {
+          return `${this.get_css_name(style)}: ${element.style_list[style]};\n`
+        })
+        return name + stylings.join("") + `}\n`;
+      });
+      return `
+        <style>
+          ${parse_css.join("")}</style>
+      `;
+    }, 
+    get_css_name(name) {
+      const name_switch = {
+        fontSize: `font-size`,
+        fontWeight: `font-weight`
+      }
+      return name_switch[name];
     },
     new_text(user_input) {
       if(user_input === ''){

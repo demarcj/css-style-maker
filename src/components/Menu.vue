@@ -9,7 +9,7 @@
           >
             New Project
           </li>
-          <li @click="export_animation"><a id="export">Export</a></li>
+          <li @click="export_stylings"><a id="export">Export</a></li>
         </ul>
       </li>
       <li>Edit
@@ -33,6 +33,7 @@
             Font
             <ul>
               <li @click="open_style(`Type in the font size`, 'num', 'fontSize')">Size</li>
+              <li @click="open_style(`Type in the font size`, 'weight', 'fontWeight')">Weight</li>
             </ul>
           </li>
         </ul>
@@ -90,10 +91,8 @@
       }
     },
     methods:{
-      export_animation() {
-        const animation = new Blob([document.querySelector("#canvas").innerHTML], {type: 'text/html'});
-        document.querySelector("#export").download = "animation.html";
-        document.querySelector("#export").href = window.URL.createObjectURL(animation);
+      export_stylings() {
+        this.$emit("export-stylings");
       },
       open_prompt(message, input_type, action) {
         this.message = message;

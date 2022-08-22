@@ -12,6 +12,7 @@
           </option>
         </select>
       </div>
+      <input v-if="input_type === 'weight'" type="number" v-model="user_input">
       <div class="button-group">
         <button class="confirm-btn" @click="close">Apply</button>
         <button class="close-btn" @click="close">Close</button>
