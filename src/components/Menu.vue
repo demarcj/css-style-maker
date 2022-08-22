@@ -4,7 +4,11 @@
       <li>
         Project
         <ul>
-          <li @click="new_project">New Project</li>
+          <li 
+            @click="open_confirm('Are you sure you want to start a new project?', 'new-project')"
+          >
+            New Project
+          </li>
           <li @click="export_animation"><a id="export">Export</a></li>
         </ul>
       </li>
@@ -19,7 +23,7 @@
       <li>
         Element
         <ul>
-          <li @click="new_text">New Text</li>
+          <li @click="open_prompt(`Name this element`, 'txt', 'new-text')">New Text</li>
         </ul>
       </li>
       <li>
@@ -27,8 +31,8 @@
         <ul>
           <li>
             Font
-            <ul class="menu_lvl3">
-              <li @click="set_style(selected_element.id, 'fontSize')">Size</li>
+            <ul>
+              <li @click="open_style(`Type in the font size`, 'num', 'fontSize')">Size</li>
             </ul>
           </li>
         </ul>
@@ -42,42 +46,102 @@
       </li> -->
       <li>Help
         <ul>
-          <li @click="about">About...</li>
+          <li @click="open_dialog(`Create HTML and export that HTML's styling as reference or use it in your project :)`)">About...</li>
         </ul>
       </li>
     </ul>
+    <basic-dialog 
+      v-if="show_dialog" 
+      @close="close_dialog"
+      :message="message"
+    ></basic-dialog>
+    <confirm-dialog 
+      v-if="show_confirm_dialog" 
+      @close="close_confirm_dialog"
+      :message="message"
+    ></confirm-dialog>
+    <prompt-dialog 
+      v-if="show_prompt_dialog" 
+      @close="close_prompt_dialog"
+      :input_type="input_type"
+      :message="message"
+    ></prompt-dialog>
+    <style-dialog 
+      v-if="show_style_dialog" 
+      @close="close_style_dialog"
+      :input_type="input_type"
+      :message="message"
+    ></style-dialog>
   </header>
 </template>
 <script>
   export default {
     props: ['selected_element'],
+    data() {
+      return {
+        show_dialog: false,
+        show_confirm_dialog: false,
+        show_prompt_dialog: false,
+        show_style_dialog: false,
+        style: '',
+        input_type: '',
+        action: ``,
+        message: ``
+      }
+    },
     methods:{
       export_animation() {
         const animation = new Blob([document.querySelector("#canvas").innerHTML], {type: 'text/html'});
         document.querySelector("#export").download = "animation.html";
         document.querySelector("#export").href = window.URL.createObjectURL(animation);
       },
-      new_project() {
-        this.$emit('new-project');
+      open_prompt(message, input_type, action) {
+        this.message = message;
+        this.action = action;
+        this.input_type = input_type;
+        this.show_prompt_dialog = true;
       },
-      new_text() {
-        this.$emit('new-text');
+      open_confirm(message, action) {
+        this.message = message;
+        this.action = action;
+        this.show_confirm_dialog = true;
+      },
+      open_style(message, input_type, style){
+        this.message = message;
+        this.style = style;
+        this.input_type = input_type;
+        this.show_style_dialog = true;
       },
       delete_layers() {
         this.$emit('delete-layers');
       },
-      display_window() {
-        this.$emit('display-window');
+      open_dialog(message) {
+        this.message = message;
+        this.show_dialog = true;
       },
-      set_style(id, style) {
-        if(!id){
-          alert(`Please select a layer`);
-          return;
-        }
-        this.$emit('set-style', id, style)
+      reset_data() {
+        this.message = ``;
+        this.input_type = ``;
+        this.style = ``;
+        this.show_dialog = false;
+        this.show_confirm_dialog = false;
+        this.show_style_dialog = false;
+        this.show_prompt_dialog = false;
       },
-      about() {
-        alert(`Create HTML and export that HTML's styling as reference or use it in your project :)`);
+      close_dialog() {
+        this.show_dialog = false;
+      },
+      close_prompt_dialog(user_input){
+        this.$emit(this.action, user_input);
+        this.reset_data();
+      },
+      close_style_dialog(user_input){
+        this.$emit('set-style', user_input, this.style)
+        this.reset_data();
+      },
+      close_confirm_dialog(confirmation){
+        this.$emit(this.action, confirmation);
+        this.reset_data();
       }
     }
   }

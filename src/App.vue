@@ -1,26 +1,28 @@
 <template>
-<Menu 
-  :selected_element="selected_element"
-  @new-project="new_project"
-  @new-text="new_text" 
-  @set-style="set_style"
-  @delete-layers="delete_layers"
-  @display-window="display_window"
-/>
-<main class="main">
-  <main-stage
-    :elements="elements"
-  ></main-stage>
-  <styling-stage 
+<div class="app-body">
+  <Menu 
     :selected_element="selected_element"
-  ></styling-stage>
-</main>
-<layers
-  :elements="elements"
-  @select-layers="select_layers"
-  @deselect-layers="deselect_layers"
-></layers>
-<Footer />
+    @new-project="new_project"
+    @new-text="new_text" 
+    @delete-layers="delete_layers"
+    @display-window="display_window"
+    @set-style="set_style"
+  />
+  <main class="main">
+    <main-stage
+      :elements="elements"
+    ></main-stage>
+    <styling-stage 
+      :selected_element="selected_element"
+    ></styling-stage>
+  </main>
+  <layers
+    :elements="elements"
+    @select-layers="select_layers"
+    @deselect-layers="deselect_layers"
+  ></layers>
+  <Footer />
+</div>
 </template>
 
 <script>
@@ -48,27 +50,22 @@ export default {
     }
   },
   methods: {
-    new_project() {
-      const confirm_new = confirm(`Are you sure you want to start a new project?`);
-      if(confirm_new){
+    new_project(confirmation) {
+      if(confirmation){
         this.elements = {};
       }
     },
-    new_text(message = `Name this element`) {
-      const text_layer = prompt(message);
-      if(text_layer === null){
+    new_text(user_input) {
+      if(user_input === ''){
         return;
-      }
-      if(text_layer === ``){
-        return this.new_text(`Please enter a name in the input field or click cancel`);
       }
       const id = uuid().toString();
       const size = Object.keys(this.elements).length ? Object.keys(this.elements).length : 0; 
       this.elements[id] = {};
       this.elements[id].id = id;
-      this.elements[id].name = text_layer;
-      this.elements[id].class_name = this.get_class_name(text_layer);
-      this.elements[id].text = text_layer;
+      this.elements[id].name = user_input;
+      this.elements[id].class_name = this.get_class_name(user_input);
+      this.elements[id].text = user_input;
       this.elements[id].index = size;
       this.elements[id].style_list = {};
       this.elements[id].selected = false;
@@ -76,13 +73,13 @@ export default {
     get_class_name(txt) {
       return txt.replaceAll(` `, `-`)
     },
-    set_style(id, style) {
-      const value = prompt(`Type in the ${style}`);
-      if(value === null){
+    set_style(user_input, style) {
+      if(user_input === null){
         return;
       }
-      this.elements[id].style_list[style] = value + `px`;
-      this.selected_element.style_list[style] = value + `px`;
+      console.log(style)
+      this.elements[this.selected_element.id].style_list[style] = user_input;
+      this.selected_element.style_list[style] = user_input;
     },
     select_layers(id) {
       this.elements[id].selected = true;
@@ -131,10 +128,12 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: var(--background);
-  height: 100vh;
+  font-size: 1.4rem;
+}
+.app-body{
   display: grid;
   grid-template-rows: auto auto 1fr auto;
-  font-size: 1.4rem;
+  height: 100vh;
 }
 .main{
   display: grid;

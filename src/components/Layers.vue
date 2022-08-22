@@ -51,6 +51,12 @@ export default {
 }
 .cell{
   cursor: pointer;
+  padding: 5px 15px;
+}
+.row{
+  display: grid;
+  grid-template-columns: 75px 1fr;
+  grid-template-rows: initial;
 }
 .row.selected{
   position: relative;
@@ -62,8 +68,9 @@ export default {
   inset: 0 auto 0 0;
   width: 2px;
 }
-.table-header-row{
+.row.table-header-row{
   border-bottom: 1px solid white;
+  background-color: var(--background);
 }
 .table-header{
   padding-top: 10px;

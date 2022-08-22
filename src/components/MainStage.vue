@@ -15,7 +15,6 @@ export default {
   props: ['elements'],
   methods: {
     parseStyling(style_list) {
-      console.log(style_list);
       if(!style_list){
         return [];
       }
@@ -24,7 +23,6 @@ export default {
         obj[style] = style_list[style];
         return obj;
       });
-      console.log(stylings)
       return stylings;
     }
   }
