@@ -1,8 +1,8 @@
 import { createApp } from 'vue';
-import BasicDialog from './components/BasicDialog.vue';
-import PromptDialog from './components/PromptDialog.vue';
-import ConfirmDialog from './components/ConfirmDialog.vue';
-import StyleDialog from './components/StyleDialog.vue';
+import BasicDialog from './components/dialog/BasicDialog.vue';
+import PromptDialog from './components/dialog/PromptDialog.vue';
+import ConfirmDialog from './components/dialog/ConfirmDialog.vue';
+import StyleDialog from './components/dialog/StyleDialog.vue';
 import App from './App.vue';
 
 const app = createApp(App);

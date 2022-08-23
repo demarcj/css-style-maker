@@ -29,7 +29,14 @@ export default {
 }
 </script>
 <style scoped>
-  .element{
-    display: inline-block;
-  }
+.element{
+  display: inline-block;
+}
+.canvas{
+  max-width: 100%;
+  height: 500px;
+  color: black;
+  background-color: white;
+  overflow: hidden;
+}
 </style>

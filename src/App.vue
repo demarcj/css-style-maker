@@ -2,6 +2,7 @@
 <div class="app-body">
   <Menu 
     :selected_element="selected_element"
+    :elements="elements"
     @new-project="new_project"
     @new-text="new_text" 
     @export-stylings="export_stylings"
@@ -105,7 +106,6 @@ export default {
       if(user_input === null){
         return;
       }
-      console.log(style)
       this.elements[this.selected_element.id].style_list[style] = user_input;
       this.selected_element.style_list[style] = user_input;
     },
@@ -144,7 +144,7 @@ export default {
       Object.keys(this.elements).forEach((id, index) => this.elements[id].index = index);
     },
     display_window() {
-      console.log(`not yet`)
+      console.log(`dddd`);
     }
   }
 }
@@ -166,11 +166,5 @@ export default {
 .main{
   display: grid;
   grid-template-columns: 1fr 15%;
-}
-.canvas{
-  max-width: 100%;
-  height: 500px;
-  color: black;
-  background-color: white;
 }
 </style>

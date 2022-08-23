@@ -1,15 +1,19 @@
-<template v-if="selected_element">
+<template>
   <header>
     <ul id="menu" class="menu">
       <li>
         Project
         <ul>
           <li 
-            @click="open_confirm('Are you sure you want to start a new project?', 'new-project')"
+            @click="open_confirm('Are you sure you want to start a new project?', 'new-project', !(Object.keys(this.elements).length > 0))"
+            :class="{'disabled-item': !(Object.keys(this.elements).length > 0)}"
           >
             New Project
           </li>
-          <li @click="export_stylings"><a id="export">Export</a></li>
+          <li 
+            @click="export_stylings()"
+            :class="{'disabled-item': !(Object.keys(this.elements).length > 0)}"
+          ><a id="export">Export</a></li>
         </ul>
       </li>
       <li>Edit
@@ -17,7 +21,12 @@
           <!-- <li>Undo</li>
           <li>Redo</li>
           <li>History</li> -->
-          <li @click="delete_layers">Delete Element</li>
+          <li 
+            @click="delete_layers()" 
+            :class="{'disabled-item': !(Object.keys(this.selected_element).length > 0)}"
+          >
+            Delete Element
+          </li>
         </ul>
       </li>
       <li>
@@ -29,7 +38,7 @@
       <li>
         Style
         <ul>
-          <li>
+          <li :class="{'disabled-item': !selected_element?.text}">
             Font
             <ul>
               <li @click="open_style(`Type in the font size`, 'num', 'fontSize')">Size</li>
@@ -53,23 +62,26 @@
     </ul>
     <basic-dialog 
       v-if="show_dialog" 
-      @close="close_dialog"
+      @close="close"
       :message="message"
     ></basic-dialog>
     <confirm-dialog 
       v-if="show_confirm_dialog" 
-      @close="close_confirm_dialog"
+      @close="close"
+      @update="update_confirm_dialog"
       :message="message"
     ></confirm-dialog>
     <prompt-dialog 
       v-if="show_prompt_dialog" 
-      @close="close_prompt_dialog"
+      @update="update_prompt_dialog"
+      @close="close"
       :input_type="input_type"
       :message="message"
     ></prompt-dialog>
     <style-dialog 
       v-if="show_style_dialog" 
-      @close="close_style_dialog"
+      @update="update_style_dialog"
+      @close="close"
       :input_type="input_type"
       :message="message"
     ></style-dialog>
@@ -77,7 +89,7 @@
 </template>
 <script>
   export default {
-    props: ['selected_element'],
+    props: ['selected_element', 'elements'],
     data() {
       return {
         show_dialog: false,
@@ -92,6 +104,9 @@
     },
     methods:{
       export_stylings() {
+        if(!(Object.keys(this.elements).length > 0)){
+          return
+        }
         this.$emit("export-stylings");
       },
       open_prompt(message, input_type, action) {
@@ -100,7 +115,10 @@
         this.input_type = input_type;
         this.show_prompt_dialog = true;
       },
-      open_confirm(message, action) {
+      open_confirm(message, action, disabled = false) {
+        if(disabled){
+          return;
+        }
         this.message = message;
         this.action = action;
         this.show_confirm_dialog = true;
@@ -112,13 +130,16 @@
         this.show_style_dialog = true;
       },
       delete_layers() {
+        if(!(Object.keys(this.selected_element).length > 0)){
+          return;
+        }
         this.$emit('delete-layers');
       },
       open_dialog(message) {
         this.message = message;
         this.show_dialog = true;
       },
-      reset_data() {
+      close() {
         this.message = ``;
         this.input_type = ``;
         this.style = ``;
@@ -127,20 +148,17 @@
         this.show_style_dialog = false;
         this.show_prompt_dialog = false;
       },
-      close_dialog() {
-        this.show_dialog = false;
-      },
-      close_prompt_dialog(user_input){
+      update_prompt_dialog(user_input){
         this.$emit(this.action, user_input);
-        this.reset_data();
+        this.close();
       },
-      close_style_dialog(user_input){
+      update_style_dialog(user_input){
         this.$emit('set-style', user_input, this.style)
-        this.reset_data();
+        this.close();
       },
-      close_confirm_dialog(confirmation){
-        this.$emit(this.action, confirmation);
-        this.reset_data();
+      update_confirm_dialog(){
+        this.$emit(this.action, true);
+        this.close();
       }
     }
   }
@@ -163,6 +181,13 @@
   }
   .menu li:hover{
     background-color: #007acc;
+  }
+  .menu li.disabled-item:hover{
+    cursor: context-menu;
+    background-color: var(--background);
+  }
+  .menu li.disabled-item:hover ul {
+    display: none;
   }
   .menu ul{
     display: none;

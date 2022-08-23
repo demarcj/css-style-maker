@@ -14,7 +14,7 @@
       </div>
       <input v-if="input_type === 'weight'" type="number" v-model="user_input">
       <div class="button-group">
-        <button class="confirm-btn" @click="close">Apply</button>
+        <button class="confirm-btn" @click="update">Apply</button>
         <button class="close-btn" @click="close">Close</button>
       </div>
     </dialog>
@@ -27,18 +27,21 @@ export default {
     return {
       user_input: ``,
       font_measuring_units: [`px`, `rem`, `em`, `percentage`, `vh`, `vw`],
-      selected_unit: ``
+      selected_unit: `px`
     }
   },
   methods: {
-    close() {
+    update() {
       if(this.user_input === ''){
         return;
       }
       if(this.input_type === 'num' && this.selected_unit === ''){
         return;
       }
-      this.$emit('close', this.user_input + this.selected_unit)
+      this.$emit('update', this.user_input + this.selected_unit);
+    },
+    close(){
+      this.$emit('close');
     }
   }
 }
