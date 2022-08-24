@@ -6,7 +6,13 @@
     :class="element.class_name"
     :key="element.id"
   >
-    <div class="element" :style="parseStyling(element.style_list)" contenteditable="true">{{ element.text }}</div> 
+    <div 
+      class="element" 
+      :style="parseStyling(element.style_list)" 
+      contenteditable="true"
+    >
+      {{ element.text }}
+    </div> 
   </div>
 </section>
 </template>

@@ -28,11 +28,11 @@
 </template>
 
 <script>
-import MainStage from './components/MainStage.vue';
-import Menu from './components/Menu.vue';
-import Layers from './components/Layers.vue';
-import StylingStage from './components/StylingStage.vue';
-import Footer from './components/Footer.vue';
+import MainStage from './components/layouts/MainStage.vue';
+import Menu from './components/layouts/Menu.vue';
+import Layers from './components/layouts/Layers.vue';
+import StylingStage from './components/layouts/StylingStage.vue';
+import Footer from './components/layouts/Footer.vue';
 import { v4 as uuid } from 'uuid';
 import './style.css';
 
