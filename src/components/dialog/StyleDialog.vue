@@ -16,7 +16,7 @@
       <dialog-button
         :show_apply="true"
         @update="update"
-        @close="close"
+        @close="$emit('close')"
       ></dialog-button>
   </dialog-content>
 </template>

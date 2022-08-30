@@ -5,7 +5,7 @@
   >
       <dialog-button
         :show_apply="false"
-        @close="close"
+        @close="$emit('close')"
       ></dialog-button>
   </dialog-content>
 </template>

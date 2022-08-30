@@ -7,7 +7,18 @@
     </dialog>
   </div>
 </template>
+<script>
+export default {
+  props: ['message']
+}
+</script>
 <style>
+  .dialog-container{
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+  }
   dialog{
     margin: auto;
     padding: 30px;

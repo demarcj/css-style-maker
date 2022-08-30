@@ -1,20 +1,18 @@
 <template>
   <div class="button-group">
-    <button class="confirm-btn" v-if="show_apply" @click="update">Apply</button>
-    <button class="close-btn" @click="close">Close</button>
+    <button 
+      class="confirm-btn" 
+      v-if="show_apply" 
+      @click="this.$emit('update')"
+    >
+      Apply
+    </button>
+    <button class="close-btn" @click="this.$emit('close')">Close</button>
   </div>
 </template>
 <script>
 export default {
-  props: ['show_apply'],
-  methods: {
-    update() {
-      this.$emit('update');
-    },
-    close() {
-      this.$emit('close');
-    }
-  }
+  props: ['show_apply']
 }
 </script>
 <style scoped>
