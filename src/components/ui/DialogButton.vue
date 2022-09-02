@@ -26,5 +26,6 @@ export default {
     display: flex;
     justify-content: right;
     gap: 15px;
+    margin-top: 15px;
   }
 </style>

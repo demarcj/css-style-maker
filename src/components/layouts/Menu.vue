@@ -41,8 +41,8 @@
           <li :class="{'disabled-item': !selected_element?.text}">
             Font
             <ul>
-              <li @click="open_style(`Type in the font size`, 'num', 'fontSize')">Size</li>
-              <li @click="open_style(`Type in the font size`, 'weight', 'fontWeight')">Weight</li>
+              <li @click="open_style(`Type in the font size`, 'fontSize')">Size</li>
+              <li @click="open_style(`Type in the font weight`, 'fontWeight')">Weight</li>
             </ul>
           </li>
         </ul>
@@ -82,7 +82,7 @@
       v-if="show_style_dialog" 
       @update="update_style_dialog"
       @close="close"
-      :input_type="input_type"
+      :style="style"
       :message="message"
     ></style-dialog>
   </header>
@@ -123,10 +123,9 @@
         this.action = action;
         this.show_confirm_dialog = true;
       },
-      open_style(message, input_type, style){
+      open_style(message, style){
         this.message = message;
         this.style = style;
-        this.input_type = input_type;
         this.show_style_dialog = true;
       },
       delete_layers() {
