@@ -2345,6 +2345,11 @@ clean-css@^5.2.2:
   dependencies:
     source-map "~0.6.0"
 
+cleave.js@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/cleave.js/-/cleave.js-1.6.0.tgz#0e4e011943bdd70c67c9dcf4ff800ce710529171"
+  integrity sha512-ivqesy3j5hQVG3gywPfwKPbi/7ZSftY/UNp5uphnqjr25yI2CP8FS2ODQPzuLXXnNLi29e2+PgPkkiKUXLs/Nw==
+
 cli-cursor@^2.0.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/cli-cursor/-/cli-cursor-2.1.0.tgz"
@@ -2441,6 +2446,11 @@ colorette@^2.0.10:
   version "2.0.19"
   resolved "https://registry.npmjs.org/colorette/-/colorette-2.0.19.tgz"
   integrity sha512-3tlv/dIP7FWvj3BsbHrGLJ6l/oKh1O3TcgBqMn+yyCagOxc23fyzDS6HypQbgxWbkpDnf52p1LuR4eWDQ/K9WQ==
+
+colortranslator@^1.9.2:
+  version "1.9.2"
+  resolved "https://registry.yarnpkg.com/colortranslator/-/colortranslator-1.9.2.tgz#baff13493677ae21355468366fb9f4a6242f9f39"
+  integrity sha512-Hr1qCLwL/5gbGhcRwfhl1+JbvHmybTGbecpbhyzn3IyizgYFxMpLpX8OGhAcvSPB0+K2bwrAcFIbeF60wqOJLg==
 
 commander@^2.20.0:
   version "2.20.3"
@@ -5949,6 +5959,11 @@ vary@~1.1.2:
   resolved "https://registry.npmjs.org/vary/-/vary-1.1.2.tgz"
   integrity sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==
 
+vue-cli-plugin-vuestic-ui@~1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/vue-cli-plugin-vuestic-ui/-/vue-cli-plugin-vuestic-ui-1.0.8.tgz#4bd627dd581cb856bf1b59cf75aa67276dae8ff6"
+  integrity sha512-xAnMAB77F9kYx52OaJF9ko8WSqiknQ+aMDLJt8heucz67Jvl16MuWJ3asQ2MQtxqE7n4GpZa5K2CtcePTmZm4w==
+
 vue-eslint-parser@^8.0.0, vue-eslint-parser@^8.0.1:
   version "8.3.0"
   resolved "https://registry.yarnpkg.com/vue-eslint-parser/-/vue-eslint-parser-8.3.0.tgz#5d31129a1b3dd89c0069ca0a1c88f970c360bd0d"
@@ -5999,6 +6014,15 @@ vue@^3.2.13:
     "@vue/runtime-dom" "3.2.37"
     "@vue/server-renderer" "3.2.37"
     "@vue/shared" "3.2.37"
+
+vuestic-ui@^1.4.7:
+  version "1.4.9"
+  resolved "https://registry.yarnpkg.com/vuestic-ui/-/vuestic-ui-1.4.9.tgz#dd4996b9b9fb397d7c86987453f40f8e811e37a0"
+  integrity sha512-Pc+qCBwycMQKaaGhPz012oYnbIga5gsG0LsjWFMfaWxe8YP9EAiYKzrTSz4fDllk2xcHHF06GgaMw0bMFW+Bbw==
+  dependencies:
+    cleave.js "^1.6.0"
+    colortranslator "^1.9.2"
+    lodash "^4.17.21"
 
 watchpack@^2.4.0:
   version "2.4.0"
