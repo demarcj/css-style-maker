@@ -5,14 +5,10 @@ import ConfirmDialog from 'src/components/dialog/ConfirmDialog.vue';
 import StyleDialog from 'src/components/dialog/StyleDialog.vue';
 import DialogButton from 'src/components/ui/DialogButton.vue';
 import DialogContent from 'src/components/ui/DialogContent.vue';
-import App from './App.vue';
-import { createVuesticEssential, VaButton } from 'vuestic-ui'
-import 'vuestic-ui/styles/essential.css'
-import 'vuestic-ui/styles/grid.css'
-import 'vuestic-ui/styles/reset.css'
-import 'vuestic-ui/styles/typography.css'
+import App from 'src/App.vue';
+import router from 'src/router'
 
-const app = createApp(App);
+const app = createApp(App).use(router);
 
 //  Dialog
 app.component('basic-dialog', BasicDialog);
@@ -25,5 +21,4 @@ app.component('dialog-button', DialogButton);
 app.component('dialog-content', DialogContent);
 
 
-app.use(createVuesticEssential({ components: { VaButton } }));
-app.mount('#app')
+app.mount('#app');
