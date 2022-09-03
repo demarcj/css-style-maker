@@ -3,10 +3,10 @@
     :message="message"
     @close="$emit('close')"
   >
-      <dialog-button
-        :show_apply="false"
-        @close="$emit('close')"
-      ></dialog-button>
+    <dialog-button
+      :show_apply="false"
+      @close="$emit('close')"
+    ></dialog-button>
   </dialog-content>
 </template>
 <script>

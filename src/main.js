@@ -1,10 +1,10 @@
 import { createApp } from 'vue';
-import BasicDialog from './components/dialog/BasicDialog.vue';
-import PromptDialog from './components/dialog/PromptDialog.vue';
-import ConfirmDialog from './components/dialog/ConfirmDialog.vue';
-import StyleDialog from './components/dialog/StyleDialog.vue';
-import DialogButton from './components/ui/DialogButton.vue';
-import DialogContent from './components/ui/DialogContent.vue';
+import BasicDialog from 'src/components/dialog/BasicDialog.vue';
+import PromptDialog from 'src/components/dialog/PromptDialog.vue';
+import ConfirmDialog from 'src/components/dialog/ConfirmDialog.vue';
+import StyleDialog from 'src/components/dialog/StyleDialog.vue';
+import DialogButton from 'src/components/ui/DialogButton.vue';
+import DialogContent from 'src/components/ui/DialogContent.vue';
 import App from './App.vue';
 
 const app = createApp(App);

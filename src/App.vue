@@ -28,15 +28,29 @@
 </template>
 
 <script>
-import MainStage from './components/layouts/MainStage.vue';
-import Menu from './components/layouts/Menu.vue';
-import Layers from './components/layouts/Layers.vue';
-import StylingStage from './components/layouts/StylingStage.vue';
-import Footer from './components/layouts/Footer.vue';
+import MainStage from 'src/components/layouts/MainStage.vue';
+import Menu from 'src/components/layouts/Menu.vue';
+import Layers from 'src/components/layouts/Layers.vue';
+import StylingStage from 'src/components/layouts/StylingStage.vue';
+import Footer from 'src/components/layouts/Footer.vue';
 import { v4 as uuid } from 'uuid';
 import './style.css';
 
 export default {
+  created() {
+    const id = uuid();
+    this.elements[id] = {};
+    this.elements[id].id = id;
+    this.elements[id].name =`example`;
+    this.elements[id].class_name = `example`;
+    this.elements[id].text = `Checkout the 'Style' menu for that special sauce`;
+    this.elements[id].index = 0;
+    this.elements[id].style_list = {
+      fontSize: `32px`
+    };
+    this.elements[id].selected = true;
+    this.selected_element = this.elements[id]
+  },
   components: {
     MainStage,
     Menu,
@@ -55,6 +69,7 @@ export default {
     new_project(confirmation) {
       if(confirmation){
         this.elements = {};
+        this.selected_element = {};
       }
     },
     export_stylings() {
@@ -88,7 +103,7 @@ export default {
       if(user_input === ''){
         return;
       }
-      const id = uuid().toString();
+      const id = uuid();
       const size = Object.keys(this.elements).length ? Object.keys(this.elements).length : 0; 
       this.elements[id] = {};
       this.elements[id].id = id;
@@ -123,7 +138,7 @@ export default {
       }
       const find_select = Object.keys(this.elements).filter(id => this.elements[id].selected);
       if(find_select.length === 1) {
-        this.selected_element = this.elements[find_select];
+        this.selected_element = {...this.elements[find_select]};
         return;
       }
       this.selected_element = {};

@@ -3,7 +3,13 @@
     :message="message"
     @close="$emit('close')"
   >
-    <input v-if="input_type === 'txt'" type="text" v-model="user_input">
+    <input 
+      id="txt" 
+      v-if="input_type === 'txt'" 
+      type="text" 
+      v-model="user_input"
+      @keyup="check_input"
+    >
     <dialog-button
       :show_apply="true"
       @update="update"
@@ -12,15 +18,16 @@
   </dialog-content>
 </template>
 <script>
-import DialogContent from '../ui/DialogContent.vue';
+import DialogContent from 'src/components/ui/DialogContent.vue';
 export default {
   components: { DialogContent },
+  mounted() {
+    document.querySelector('#txt').focus();
+  },
   props: ['message', 'input_type'],
   data() {
     return {
       user_input: ``,
-      font_measuring_units: [`px`, `rem`, `em`, `percentage`, `vh`, `vw`],
-      selected_unit: ``
     }
   },
   methods: {
@@ -28,10 +35,12 @@ export default {
       if(this.user_input === ''){
         return;
       }
-      if(this.input_type === 'num' && this.selected_unit === ''){
-        return;
+      this.$emit('update', this.user_input)
+    },
+    check_input(event){
+      if(event.keyCode === 13){
+        return this.update();
       }
-      this.$emit('update', this.user_input + this.selected_unit)
     }
   }
 }

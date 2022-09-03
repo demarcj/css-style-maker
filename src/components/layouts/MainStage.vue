@@ -1,4 +1,4 @@
-<template v-if="elements">
+<template>
 <section id="canvas" class="canvas">
   <div 
     v-for="element in elements"
@@ -9,7 +9,6 @@
     <div 
       class="element" 
       :style="parseStyling(element.style_list)" 
-      contenteditable="true"
     >
       {{ element.text }}
     </div> 
@@ -18,7 +17,14 @@
 </template>
 <script>
 export default {
-  props: ['elements'],
+  props: {
+    elements: {
+      type: Object,
+      default() {
+        return {}
+      }
+    }
+  },
   methods: {
     parseStyling(style_list) {
       if(!style_list){
@@ -44,5 +50,6 @@ export default {
   color: black;
   background-color: white;
   overflow: hidden;
+  border: 1px solid var(--background) ;
 }
 </style>

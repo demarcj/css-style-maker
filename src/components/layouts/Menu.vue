@@ -165,7 +165,6 @@
 <style scoped>
   header{
     background: var(--background);
-    border-bottom: 1px solid white;
   }
   .menu{
     display: flex;

@@ -3,8 +3,16 @@
     :message="message"
     @close="$emit('close')"
   >
-    <FontSize v-if="style === 'fontSize'" @update_input="update_input" />
-    <FontWeight v-if="style === 'fontWeight'" @update_input="update_input" />
+    <FontSize 
+      v-if="style === 'fontSize'" 
+      @update="update" 
+      @update_input="update_input" 
+    />
+    <FontWeight 
+      v-if="style === 'fontWeight'" 
+      @update="update" 
+      @update_input="update_input" 
+    />
     <dialog-button
       :show_apply="true"
       @update="update"

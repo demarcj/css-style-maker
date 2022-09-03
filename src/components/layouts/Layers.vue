@@ -1,4 +1,4 @@
-<template v-if="elements">
+<template>
 <section id="layers" class="layers">
   <div class="row table-header-row">
     <div class="cell table-header">Index</div>
@@ -20,7 +20,14 @@
 </template>
 <script>
 export default {
-  props: ['elements'],
+  props: {
+    elements: {
+      type: Object,
+      default() {
+        return {}
+      }
+    }
+  },
   methods: {
     select_layers(id) {
       const selected = !this.elements[id].selected;
@@ -37,7 +44,6 @@ export default {
 </script>
 <style scoped>
 .layers{
-  border-top: 1px solid white;
   overflow: hidden;
   display: grid;
   grid-template-rows: auto 1fr;
@@ -71,6 +77,9 @@ export default {
 .row.table-header-row{
   border-bottom: 1px solid white;
   background-color: var(--background);
+}
+.row.table-header-row .cell{
+  cursor: context-menu;
 }
 .table-header{
   padding-top: 10px;
