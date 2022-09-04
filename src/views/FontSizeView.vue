@@ -1,3 +1,3 @@
 <template>
-  <h1>Font Size</h1>
+  <div>Font Size</div>
 </template>

@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import HomeView from 'src/views/HomeView.vue'
-import FontSizeView from '@/views/FontSizeView.vue'
+import HomeView from 'src/views/HomeView.vue';
+import FontSizeView from 'src/views/FontSizeView.vue'
 
 const routes: Array<RouteRecordRaw> = [
     { path: '/', component: HomeView },
