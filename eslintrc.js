@@ -8,6 +8,5 @@ module.exports = {
         'vue/comment-directive': 0,
       }
     } 
-  ],
-  lintOnSave: false
+  ]
 }
