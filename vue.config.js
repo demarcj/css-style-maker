@@ -6,14 +6,11 @@ module.exports = defineConfig({
   publicPath: process.env.NODE_ENV === 'production'
     ? 'https://demarcj.github.io/css-style-maker'
     : '/',
-    configureWebpack: {
-      resolve: {
-        alias: {
-          src: path.resolve(__dirname, 'src')
-        }
-      },
-      optimization: {
-        usedExports: true,
+  configureWebpack: {
+    resolve: {
+      alias: {
+        src: path.resolve(__dirname, 'src')
       }
     }
+  }
 });

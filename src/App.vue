@@ -14,7 +14,8 @@
     <main-stage
       :elements="elements"
     ></main-stage>
-    <styling-stage 
+    <styling-stage
+      v-if="show_window.style"
       :selected_element="selected_element"
     ></styling-stage>
   </main>
@@ -24,6 +25,9 @@
     @deselect-layers="deselect_layers"
   ></layers>
   <Footer />
+</div>
+<div class="page-view" v-if="show_page_view">
+  <router-view></router-view>
 </div>
 </template>
 
@@ -49,7 +53,8 @@ export default {
       fontSize: `32px`
     };
     this.elements[id].selected = true;
-    this.selected_element = this.elements[id]
+    this.selected_element = this.elements[id];
+    this.show_page_view = this.$route.path !== `/`;
   },
   components: {
     MainStage,
@@ -62,7 +67,12 @@ export default {
     return {
       elements: {},
       selected_element: {},
-      windows: {}
+      windows: {},
+      show_page_view: true,
+      show_window: {
+        style: true
+      },
+
     }
   },
   methods: {
@@ -158,8 +168,13 @@ export default {
       }
       Object.keys(this.elements).forEach((id, index) => this.elements[id].index = index);
     },
-    display_window() {
-      console.log(`dddd`);
+    display_window(window_type) {
+      this.show_window[window_type] = !this.show_window[window_type];
+    }
+  },
+  watch: {
+    $route(new_route){
+      this.show_page_view = new_route.path !== `/`;
     }
   }
 }
@@ -172,14 +187,18 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   background: var(--background);
   font-size: 1.4rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  height: 100vh;
 }
 .app-body{
   display: grid;
   grid-template-rows: auto auto 1fr auto;
-  height: 100vh;
 }
 .main{
-  display: grid;
-  grid-template-columns: 1fr 15%;
+  display: flex;
+}
+.page-view{
+  width: 50vw;
 }
 </style>

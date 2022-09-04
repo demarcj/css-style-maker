@@ -33,6 +33,8 @@ export default {
   .style-info{
     display: grid;
     grid-template-rows: auto 1fr;
+    width: 100%;
+    max-width: 25%;
   }
   .style-header{
     color: white;

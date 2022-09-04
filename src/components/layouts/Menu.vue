@@ -2,13 +2,13 @@
   <header>
     <ul id="menu" class="menu">
       <li>
-        Project
+        <div>Project</div>
         <ul>
           <li 
             @click="open_confirm('Are you sure you want to start a new project?', 'new-project', !(Object.keys(this.elements).length > 0))"
             :class="{'disabled-item': !(Object.keys(this.elements).length > 0)}"
           >
-            New Project
+            <div>New Project</div>
           </li>
           <li 
             @click="export_stylings()"
@@ -16,7 +16,8 @@
           ><a id="export">Export</a></li>
         </ul>
       </li>
-      <li>Edit
+      <li>
+        <div>Edit</div>
         <ul>
           <!-- <li>Undo</li>
           <li>Redo</li>
@@ -25,38 +26,65 @@
             @click="delete_layers()" 
             :class="{'disabled-item': !(Object.keys(this.selected_element).length > 0)}"
           >
-            Delete Element
+            <div>Delete Element</div>
           </li>
         </ul>
       </li>
       <li>
-        Element
+        <div>Element</div>
         <ul>
-          <li @click="open_prompt(`Name this element`, 'txt', 'new-text')">New Text</li>
+          <li @click="open_prompt(`Name this element`, 'txt', 'new-text')">
+            <div>New Text</div>
+          </li>
         </ul>
       </li>
       <li>
-        Style
+        <div>Style</div>
         <ul>
           <li :class="{'disabled-item': !selected_element?.text}">
-            Font
+            <div>Font</div>
             <ul>
-              <li @click="open_style(`Type in the font size`, 'fontSize')">Size</li>
-              <li @click="open_style(`Type in the font weight`, 'fontWeight')">Weight</li>
+              <li @click="open_style(`Type in the font size`, 'fontSize')">
+                <div>Size</div>
+              </li>
+              <li @click="open_style(`Type in the font weight`, 'fontWeight')">
+                <div>Weight</div>
+              </li>
             </ul>
           </li>
         </ul>
       </li>
       <!-- <li>Animation</li> -->
-      <!-- <li>
-        Window
+      <li>
+        <div>Reference</div>
         <ul>
-          <li @click="display_window">Style</li>
+          <li>
+            <router-link to="./">No Reference</router-link>
+          </li>
+          <li>
+            <div>Font</div>
+            <ul>
+              <li>
+                <router-link to="/font-size">Font Size</router-link>
+              </li>
+            </ul>
+          </li>
         </ul>
-      </li> -->
-      <li>Help
+      </li>
+      <li>
+        <div>Window</div>
         <ul>
-          <li @click="open_dialog(`Create HTML and export that HTML's styling as reference or use it in your project :)`)">About...</li>
+          <li @click="$emit('display-window', 'style')">
+            <div>Style</div>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <div>Help</div>
+        <ul>
+          <li @click="open_dialog(`Create HTML and export that HTML's styling as reference or use it in your project :)`)">
+            <div>About...</div>
+          </li>
         </ul>
       </li>
     </ul>
@@ -171,12 +199,15 @@
     flex-direction: row;
   }
   .menu li{
-    padding: 10px;
     position: relative;
     cursor: pointer;
     color: white;
     white-space: nowrap;
+    display: block;
   }
+  .menu li div, .menu li a {
+    padding: 10px;
+  } 
   .menu li:hover{
     background-color: #007acc;
   }
@@ -200,5 +231,6 @@
     top: 0;
   }
   .menu li:hover>ul{display: block;}
+  .menu a{display: block;}
 </style>
 
