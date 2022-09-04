@@ -1,4 +1,6 @@
 import { createApp } from 'vue';
+import ElementPlus from 'element-plus';
+import 'element-plus/dist/index.css';
 import BasicDialog from 'src/components/dialog/BasicDialog.vue';
 import PromptDialog from 'src/components/dialog/PromptDialog.vue';
 import ConfirmDialog from 'src/components/dialog/ConfirmDialog.vue';
@@ -20,5 +22,5 @@ app.component('style-dialog', StyleDialog);
 app.component('dialog-button', DialogButton);
 app.component('dialog-content', DialogContent);
 
-
+app.use(ElementPlus);
 app.mount('#app');
