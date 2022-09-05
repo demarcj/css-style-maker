@@ -201,4 +201,19 @@ export default {
 .page-view{
   width: 50vw;
 }
+@media screen and (max-width: 960px) {
+  #app{
+    height: auto;
+    grid-template-columns: 1fr;
+  }
+  .main {
+    display: block;
+  }
+  .app-body{
+    order: 2;
+  }
+  .page-view{
+    order: 1;
+  }
+}
 </style>

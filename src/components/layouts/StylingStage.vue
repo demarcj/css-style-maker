@@ -30,23 +30,30 @@ export default {
 </script>
 
 <style scoped>
+.style-info{
+  display: grid;
+  grid-template-rows: auto 1fr;
+  width: 100%;
+  max-width: 25%;
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+}
+.style-header{
+  color: white;
+  border-bottom: 1px solid white;
+  padding: 5px;
+}
+.style-stage-container{
+  padding: 5px;
+  overflow: scroll;
+}
+.name{
+  font-size: 18px;
+  padding-bottom: 5px;
+}
+@media screen and (max-width: 960px) {
   .style-info{
-    display: grid;
-    grid-template-rows: auto 1fr;
-    width: 100%;
-    max-width: 25%;
+    max-width: none;
   }
-  .style-header{
-    color: white;
-    border-bottom: 1px solid white;
-    padding: 5px;
-  }
-  .style-stage-container{
-    padding: 5px;
-    overflow: scroll;
-  }
-  .name{
-    font-size: 18px;
-    padding-bottom: 5px;
-  }
+}
 </style>

@@ -50,7 +50,6 @@ export default {
   color: black;
   background-color: white;
   overflow: hidden;
-  border: 1px solid var(--background);
   flex: 1;
 }
 </style>

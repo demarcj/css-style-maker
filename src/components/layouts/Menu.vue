@@ -1,6 +1,14 @@
 <template>
   <header>
-    <ul id="menu" class="menu">
+    <span 
+      class="mobile-menu material-icons"
+      @click="display_menu"
+    >menu</span>
+    <ul 
+      id="menu" 
+      class="menu"
+      :class="{'display-menu-mobile': show_menu_mobile}"
+    >
       <li>
         <div>Project</div>
         <ul>
@@ -124,13 +132,24 @@
         show_confirm_dialog: false,
         show_prompt_dialog: false,
         show_style_dialog: false,
+        show_menu_mobile: false,
         style: '',
         input_type: '',
         action: ``,
         message: ``
       }
     },
+    mounted() {
+      document.querySelectorAll(".menu li").forEach(element => {
+        element.addEventListener('click', () => {
+          console.log(`hello`);
+        }, 'once')
+      });
+    },
     methods:{
+      display_menu(){
+        this.show_menu_mobile = !this.show_menu_mobile;
+      },
       export_stylings() {
         if(!(Object.keys(this.elements).length > 0)){
           return
@@ -191,46 +210,64 @@
   }
 </script>
 <style scoped>
-  header{
-    background: var(--background);
-  }
-  .menu{
-    display: flex;
-    flex-direction: row;
-  }
-  .menu li{
-    position: relative;
-    cursor: pointer;
-    color: white;
-    white-space: nowrap;
-    display: block;
-  }
-  .menu li div, .menu li a {
-    padding: 10px;
-  } 
-  .menu li:hover{
-    background-color: #007acc;
-  }
-  .menu li.disabled-item:hover{
-    cursor: context-menu;
-    background-color: var(--background);
-  }
-  .menu li.disabled-item:hover ul {
-    display: none;
-  }
-  .menu ul{
-    display: none;
-    position: absolute;
-    background: var(--background);
-    inset: 100% auto auto 0;
-    min-width: 100%;
-    width: 150px;
-  }
-  .menu ul ul{
-    left: 100%;
-    top: 0;
-  }
-  .menu li:hover>ul{display: block;}
-  .menu a{display: block;}
+header{
+  background: var(--background);
+}
+.menu{
+  display: flex;
+  flex-direction: row;
+}
+.menu li{
+  position: relative;
+  cursor: pointer;
+  color: white;
+  white-space: nowrap;
+  display: block;
+}
+.menu li div, .menu li a {
+  padding: 10px;
+} 
+.menu li:hover{
+  background-color: #007acc;
+}
+.menu li.disabled-item:hover{
+  cursor: context-menu;
+  background-color: var(--background);
+}
+.menu li.disabled-item:hover ul {
+  display: none;
+}
+.menu ul{
+  display: none;
+  position: absolute;
+  background: var(--background);
+  inset: 100% auto auto 0;
+  min-width: 100%;
+  width: 150px;
+}
+.menu ul ul{
+  left: 100%;
+  top: 0;
+}
+.menu a{display: block;}
+.mobile-menu{
+  display: none;
+  cursor: pointer;
+  padding: 5px;
+}
+  .menu li:hover>ul{display: block;} 
+@media screen and (min-width: 961px) {
+  /* .menu li:hover>ul{display: block;}  */
+}
+@media screen and (max-width: 960px) {
+  .menu{ display: none; }
+  .mobile-menu{display: inline-block;}
+  .menu.display-menu-mobile{display: block;}
+  .menu ul{position: static;}
+  .menu li{border-bottom: 1px solid white;}
+  .menu li:last-of-type{border-bottom: none;}
+  .menu li li div, .menu li li a{ padding: 10px 25px; }
+  .menu li li li div, .menu li li li a{ padding: 10px 35px; }
+}
 </style>
 
