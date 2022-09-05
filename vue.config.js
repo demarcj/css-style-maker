@@ -3,9 +3,11 @@ const path = require('path');
 
 module.exports = defineConfig({
   transpileDependencies: true,
-  publicPath: process.env.NODE_ENV === 'production'
-    ? 'https://demarcj.github.io/css-style-maker'
-    : '/',
+  // publicPath: process.env.NODE_ENV === 'production'
+  publicPath: './',
+    // ? 'https://demarcj.github.io/css-style-maker'
+    // ? './css-style-maker'
+    // : '/',
   configureWebpack: {
     resolve: {
       alias: {

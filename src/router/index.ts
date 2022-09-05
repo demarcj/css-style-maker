@@ -5,6 +5,7 @@ import FontSizeView from 'src/views/FontSizeView.vue'
 const routes: Array<RouteRecordRaw> = [
     { path: '/', component: HomeView },
     { path: '/font-size', component: FontSizeView },
+    { path: '/:notFound(.*)', redirect: '/'}
 ]
 
 const router = createRouter({
