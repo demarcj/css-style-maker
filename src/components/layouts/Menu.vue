@@ -52,10 +52,10 @@
           <li :class="{'disabled-item': !selected_element?.text}">
             <div>Font</div>
             <ul>
-              <li @click="open_style(`Type in the font size`, 'fontSize')">
+              <li @click="open_style(`Type in the font size`, 'font-size')">
                 <div>Size</div>
               </li>
-              <li @click="open_style(`Type in the font weight`, 'fontWeight')">
+              <li @click="open_style(`Type in the font weight`, 'font-weight')">
                 <div>Weight</div>
               </li>
             </ul>
@@ -133,6 +133,7 @@
         show_prompt_dialog: false,
         show_style_dialog: false,
         show_menu_mobile: false,
+        open_list_index: undefined,
         style: '',
         input_type: '',
         action: ``,
@@ -140,15 +141,28 @@
       }
     },
     mounted() {
-      document.querySelectorAll(".menu li").forEach(element => {
-        element.addEventListener('click', () => {
-          console.log(`hello`);
-        }, 'once')
+      document.querySelectorAll(".menu > li > div").forEach((element, index) => {
+        this.display_menu_list(element, `.menu > li > div`, index);
       });
     },
     methods:{
       display_menu(){
         this.show_menu_mobile = !this.show_menu_mobile;
+      },
+      display_menu_list(element, target, index) {
+        const new_target = target.replace('div', 'ul');
+        const class_name = `opened-list`;
+        if(element?.nextSibling?.tagName.includes(`UL`)) {
+          element.addEventListener('click', () => {
+            if(index !== this.open_list_index){
+              if(this.open_list_index){
+                document.querySelectorAll(new_target)[this.open_list_index].classList.toggle(class_name);
+              }
+              document.querySelectorAll(new_target)[index].classList.toggle(class_name);
+              this.open_list_index = index;
+            } 
+          }, false);
+        }
       },
       export_stylings() {
         if(!(Object.keys(this.elements).length > 0)){
@@ -255,19 +269,19 @@ header{
   cursor: pointer;
   padding: 5px;
 }
-  .menu li:hover>ul{display: block;} 
 @media screen and (min-width: 961px) {
-  /* .menu li:hover>ul{display: block;}  */
+  .menu li:hover>ul{display: block;} 
 }
 @media screen and (max-width: 960px) {
   .menu{ display: none; }
   .mobile-menu{display: inline-block;}
   .menu.display-menu-mobile{display: block;}
   .menu ul{position: static;}
-  .menu li{border-bottom: 1px solid white;}
-  .menu li:last-of-type{border-bottom: none;}
+  .menu li div, .menu li a{border-bottom: 1px solid white;}
   .menu li li div, .menu li li a{ padding: 10px 25px; }
   .menu li li li div, .menu li li li a{ padding: 10px 35px; }
+  .menu li:hover{background-color: inherit;}
+  ul.opened-list{display: block;}
 }
 </style>
 

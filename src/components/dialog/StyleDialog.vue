@@ -4,12 +4,12 @@
     @close="$emit('close')"
   >
     <FontSize 
-      v-if="style === 'fontSize'" 
+      v-if="style === 'font-size'" 
       @update="update" 
       @update_input="update_input" 
     />
     <FontWeight 
-      v-if="style === 'fontWeight'" 
+      v-if="style === 'font-weight'" 
       @update="update" 
       @update_input="update_input" 
     />

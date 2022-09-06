@@ -50,7 +50,7 @@ export default {
     this.elements[id].text = `Checkout the 'Style' menu for that special sauce`;
     this.elements[id].index = 0;
     this.elements[id].style_list = {
-      fontSize: `32px`
+      'font-size': `32px`
     };
     this.elements[id].selected = true;
     this.selected_element = this.elements[id];
@@ -93,22 +93,13 @@ export default {
         const element = this.elements[id];
         const name = `.${element.class_name}{\n`;
         const stylings = Object.keys(element.style_list).map(style => {
-          return `${this.get_css_name(style)}: ${element.style_list[style]};\n`
+          return `${style}: ${element.style_list[style]};\n`
         })
         return name + stylings.join("") + `}\n`;
       });
-      return `
-        <style>
-          ${parse_css.join("")}</style>
+      return `<style>\n${parse_css.join("")}</style>
       `;
     }, 
-    get_css_name(name) {
-      const name_switch = {
-        fontSize: `font-size`,
-        fontWeight: `font-weight`
-      }
-      return name_switch[name];
-    },
     new_text(user_input) {
       if(user_input === ''){
         return;
