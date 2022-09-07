@@ -5,18 +5,13 @@
   >
     <dialog-button
       :show_apply="true"
-      @update="update"
+      @update="$emit('update')"
       @close="$emit('close')"
     ></dialog-button>
   </dialog-content>
 </template>
 <script>
 export default {
-  props: ['message'],
-  methods: {
-    update() {
-      this.$emit('update');
-    }
-  }
+  props: ['message']
 }
 </script>
