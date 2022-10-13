@@ -10,7 +10,7 @@
     @display-window="display_window"
     @set-style="set_style"
   />
-  <main class="main">
+  <div class="main-stage">
     <main-stage
       :elements="elements"
     ></main-stage>
@@ -18,7 +18,7 @@
       v-if="show_window.style"
       :selected_element="selected_element"
     ></styling-stage>
-  </main>
+  </div>
   <layers
     :elements="elements"
     @select-layers="select_layers"
@@ -186,7 +186,7 @@ export default {
   display: grid;
   grid-template-rows: auto auto 1fr auto;
 }
-.main{
+.main-stage{
   display: flex;
 }
 .page-view{
@@ -197,7 +197,7 @@ export default {
     height: auto;
     grid-template-columns: 1fr;
   }
-  .main {
+  .main-stage {
     display: block;
   }
   .app-body{
@@ -205,6 +205,9 @@ export default {
   }
   .page-view{
     order: 1;
+    width: 100%;
+    border-bottom: 1px solid white;
+    max-height: 80vh;
   }
 }
 </style>
