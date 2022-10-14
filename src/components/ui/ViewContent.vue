@@ -1,5 +1,10 @@
 <template>
   <main class="main">
+    <router-link to="/">
+      <span class="material-icons">
+        close
+      </span>
+    </router-link>
     <h1 class="title">{{ title }}</h1>
     <slot></slot>
   </main>

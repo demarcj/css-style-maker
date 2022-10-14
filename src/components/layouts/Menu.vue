@@ -14,12 +14,12 @@
       <li>
         <div id="project" @click="display_menu_list(`project`)">Project</div>
         <ul>
-          <li :class="{'disabled-item': !(Object.keys(this.elements).length > 0)}" >
-            <div @click="open_confirm('Are you sure you want to start a new project?', 'new-project', !(Object.keys(this.elements).length > 0))" >
+          <li :class="{'disabled-item': !(Object.keys(elements).length > 0)}" >
+            <div @click="open_confirm('Are you sure you want to start a new project?', 'new-project', !(Object.keys(elements).length > 0))" >
               New Project
             </div>
           </li>
-          <li :class="{'disabled-item': !(Object.keys(this.elements).length > 0)}" >
+          <li :class="{'disabled-item': !(Object.keys(elements).length > 0)}" >
             <a id="export" @click="export_stylings()">Export</a>
           </li>
         </ul>
@@ -32,7 +32,7 @@
           <li>History</li> -->
           <li 
             @click="delete_layers()" 
-            :class="{'disabled-item': !(Object.keys(this.selected_element).length > 0)}"
+            :class="{'disabled-item': !(Object.keys(selected_element).length > 0)}"
           >
             <div>Delete Element</div>
           </li>
@@ -62,7 +62,9 @@
           </li>
         </ul>
       </li>
-      <!-- <li>Animation</li> -->
+      <li>
+        <div id="animation">Animation</div>
+      </li>
       <li>
         <div id="reference" @click="display_menu_list(`reference`)">Reference</div>
         <ul>
@@ -74,6 +76,9 @@
             <ul>
               <li>
                 <router-link to="/font-size">Font Size</router-link>
+              </li>
+              <li>
+                <router-link to="/font-weight">Font Weight</router-link>
               </li>
             </ul>
           </li>
@@ -156,6 +161,10 @@ export default defineComponent({
       this.$emit("export-stylings");
     },
     open_prompt(message: string, input_type: string, action: string) {
+      if(Object.keys(this.elements).length >= 100){
+        this.open_dialog(`You have reached the max amount of layers`);
+        return;
+      }
       this.message = message;
       this.action = action;
       this.input_type = input_type;
@@ -229,9 +238,12 @@ header{
 .menu li:hover{
   background-color: #007acc;
 }
+.menu li.disabled-item{
+  background-color: #eee;
+  color: #007acc
+}
 .menu li.disabled-item:hover{
   cursor: context-menu;
-  background-color: var(--background);
 }
 .menu li.disabled-item:hover ul {
   display: none;
