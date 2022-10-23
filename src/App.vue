@@ -54,7 +54,7 @@ export default {
     };
     this.elements[id].selected = true;
     this.selected_element = this.elements[id];
-    this.show_page_view = this.$route.path !== `/` || this.$route.path !== `/css-style-maker`;
+    this.display_view(this.$route.path);
   },
   components: {
     MainStage,
@@ -68,7 +68,7 @@ export default {
       elements: {},
       selected_element: {},
       windows: {},
-      show_page_view: true,
+      show_page_view: false,
       show_window: {
         style: true
       },
@@ -161,11 +161,14 @@ export default {
     },
     display_window(window_type) {
       this.show_window[window_type] = !this.show_window[window_type];
+    },
+    display_view(path) {
+      this.show_page_view = path !== `/` && !path.includes(`css-style-maker`);
     }
   },
   watch: {
     $route(new_route){
-      this.show_page_view = new_route.path !== `/`;
+      this.display_view(new_route.path);
     }
   }
 }

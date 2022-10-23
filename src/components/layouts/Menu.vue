@@ -69,7 +69,7 @@
         <div id="reference" @click="display_menu_list(`reference`)">Reference</div>
         <ul>
           <li>
-            <router-link to="./">No Reference</router-link>
+            <router-link :to="environment">No Reference</router-link>
           </li>
           <li>
             <div id="ref_font" @click="display_menu_list(`ref_font`)">Font</div>
@@ -140,6 +140,7 @@ export default defineComponent({
       show_style_dialog: false,
       show_menu_mobile: false,
       open_list_index: undefined,
+      environment: window.location.hostname.includes(`localhost`) ? `/` : `/css-style-maker`,
       style: '',
       input_type: '',
       action: ``,
