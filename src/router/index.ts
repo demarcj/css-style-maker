@@ -7,10 +7,10 @@ import ErrorView from 'src/views/ErrorView.vue';
 const environment = window.location.hostname.includes(`localhost`) ? `/` : `/css-style-maker`;
 
 const routes: Array<RouteRecordRaw> = [
-    { path: `${environment}`, component: HomeView },
-    { path: `${environment}/font-size`, component: FontSizeView },
-    { path: `${environment}/font-weight`, component: FontWeightView },
-    { path: `/:notFound(.*)`, component: ErrorView }
+  { path: `${environment}`, component: HomeView },
+  { path: `/font-size`, component: FontSizeView },
+  { path: `/font-weight`, component: FontWeightView },
+  { path: `/:notFound(.*)`, component: ErrorView }
 ]
   
 const router = createRouter({

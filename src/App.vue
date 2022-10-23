@@ -54,7 +54,7 @@ export default {
     };
     this.elements[id].selected = true;
     this.selected_element = this.elements[id];
-    this.show_page_view = this.$route.path !== `/`;
+    this.show_page_view = this.$route.path !== `/` || this.$route.path !== `/css-style-maker`;
   },
   components: {
     MainStage,
