@@ -5,7 +5,6 @@
   >
     <input 
       id="txt" 
-      v-if="input_type === 'txt'" 
       type="text" 
       v-model="user_input"
       @keyup="check_input"
@@ -24,7 +23,7 @@ export default {
   mounted() {
     document.querySelector('#txt').focus();
   },
-  props: ['message', 'input_type'],
+  props: ['message'],
   data() {
     return {
       user_input: ``,

@@ -19,6 +19,12 @@
               New Project
             </div>
           </li>
+          <li :class="{'disabled-item': !(Object.keys(elements).length > 0)}">
+            <div @click="open_prompt(`Open project`, 'open-project')">Open Project</div>
+          </li>
+          <li :class="{'disabled-item': !(Object.keys(elements).length > 0)}">
+            <div @click="open_prompt(`Save this as...`, 'save')">Save</div>
+          </li>
           <li :class="{'disabled-item': !(Object.keys(elements).length > 0)}" >
             <a id="export" @click="export_stylings()">Export</a>
           </li>
@@ -42,7 +48,7 @@
         <div id="element" @click="display_menu_list(`element`)">Element</div>
         <ul>
           <li>
-            <div @click="open_prompt(`Name this element`, 'txt', 'new-text')">New Text</div>
+            <div @click="open_prompt(`Name this element`, 'new-text')">New Text</div>
           </li>
         </ul>
       </li>
@@ -116,7 +122,6 @@
       v-if="show_prompt_dialog" 
       @update="update_prompt_dialog"
       @close="close"
-      :input_type="input_type"
       :message="message"
     ></prompt-dialog>
     <style-dialog 
@@ -142,7 +147,6 @@ export default defineComponent({
       open_list_index: undefined,
       environment: window.location.hostname.includes(`localhost`) ? `/` : `/css-style-maker`,
       style: '',
-      input_type: '',
       action: ``,
       message: ``
     }
@@ -161,14 +165,13 @@ export default defineComponent({
       }
       this.$emit("export-stylings");
     },
-    open_prompt(message: string, input_type: string, action: string) {
+    open_prompt(message: string, action: string) {
       if(Object.keys(this.elements).length >= 100){
         this.open_dialog(`You have reached the max amount of layers`);
         return;
       }
       this.message = message;
       this.action = action;
-      this.input_type = input_type;
       this.show_prompt_dialog = true;
     },
     open_confirm(message: string, action: string, disabled: boolean = false) {
@@ -196,7 +199,6 @@ export default defineComponent({
     },
     close() {
       this.message = ``;
-      this.input_type = ``;
       this.style = ``;
       this.show_dialog = false;
       this.show_confirm_dialog = false;
