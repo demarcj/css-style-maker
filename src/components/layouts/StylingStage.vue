@@ -1,7 +1,7 @@
 <template>
   <section id="style-info" class="style-info">
     <div class="style-header">Stylings</div>
-    <div class="style-stage-container" v-if="Object.keys(this.selected_element).length > 0 ">
+    <div class="style-stage-container" v-if="Object.keys(selected_element).length > 0 ">
       <div class="data-section">
         <div class="name">{{ selected_element.name }}</div>
         <div class="style_list">Class Name: {{ selected_element.class_name }}</div>
@@ -16,17 +16,17 @@
     </div>
   </section>
 </template>
-<script>
-export default {
+<script lang="ts">
+import { defineComponent, PropType } from 'vue';
+import { ElementData } from 'src/interface';
+export default defineComponent({
   props: {
     selected_element: {
-      type: Object,
-      default() {
-        return {}
-      }
+      type: Object as PropType<ElementData>,
+      default: () => ({})
     }
   }
-}
+});
 </script>
 
 <style scoped>

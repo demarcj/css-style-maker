@@ -15,30 +15,30 @@
   </div>
 </section>
 </template>
-<script>
-export default {
+<script lang="ts">
+import { defineComponent, PropType } from 'vue';
+import { ElementModel } from 'src/interface';
+export default defineComponent({
   props: {
     elements: {
-      type: Object,
-      default() {
-        return {}
-      }
+      type: Object as PropType<ElementModel>,
+      default: () => ({})
     }
   },
   methods: {
-    parseStyling(style_list) {
+    parseStyling(style_list: {[key:string]: {}}): {} {
       if(!style_list){
         return [];
       }
       const stylings = Object.keys(style_list).map(style => {
-        const obj = {};
+        const obj: {[key:string]: {}} = {};
         obj[style] = style_list[style];
         return obj;
       });
       return stylings;
     }
   }
-}
+})
 </script>
 <style scoped>
 .element{

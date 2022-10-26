@@ -3,14 +3,15 @@
     <div>&copy;{{ get_year() }} DeMarc Johnson</div>
   </footer>
 </template>
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue';
+export default defineComponent({
   methods: {
     get_year() {
       return new Date().getFullYear();
     }
   }
-}
+});
 </script>
 <style scoped>
   .footer{

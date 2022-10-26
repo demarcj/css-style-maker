@@ -3,17 +3,20 @@
     <button 
       class="confirm-btn" 
       v-if="show_apply" 
-      @click="this.$emit('update')"
+      @click="$emit('update')"
     >
       Apply
     </button>
-    <button class="close-btn" @click="this.$emit('close')">Close</button>
+    <button class="close-btn" @click="$emit('close')">Close</button>
   </div>
 </template>
-<script>
-export default {
-  props: ['show_apply']
-}
+<script lang="ts">
+import { defineComponent } from 'vue';
+export default defineComponent({
+  props: {
+    show_apply: Boolean
+  }
+})
 </script>
 <style scoped>
   .confirm-btn{

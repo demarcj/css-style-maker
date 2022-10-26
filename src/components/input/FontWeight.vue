@@ -1,14 +1,17 @@
 <template>
   <input 
-    id="input" type="number" 
+    id="input" 
+    type="number" 
     @keyup="update_input" 
     v-model="user_input"
   >
 </template>
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue';
+export default defineComponent({
   mounted() {
-    document.querySelector('#input').focus();
+    const input = document.querySelector('#input') as HTMLElement;
+    input.focus();
   },
   emits: ['update', 'update_input'],
   data() {
@@ -17,15 +20,15 @@ export default {
     };
   },
   methods: {
-    update_input(event) {
+    update_input(event: KeyboardEvent) {
       if (this.user_input === "") {
         return;
       }
       this.$emit("update_input", this.user_input);
-      if(event.keyCode === 13){
+      if(event.code === `Enter`){
         this.$emit('update');
       }
     }
   }
-}
+})
 </script>

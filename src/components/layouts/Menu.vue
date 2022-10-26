@@ -19,7 +19,7 @@
               New Project
             </div>
           </li>
-          <li :class="{'disabled-item': !(Object.keys(elements).length > 0)}">
+          <li :class="{'disabled-item': projects}">
             <div @click="open_prompt(`Open project`, 'open-project')">Open Project</div>
           </li>
           <li :class="{'disabled-item': !(Object.keys(elements).length > 0)}">
@@ -134,9 +134,19 @@
   </header>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, PropType } from 'vue';
+import { ElementModel, ElementData } from 'src/interface';
 export default defineComponent({
-  props: ['selected_element', 'elements'],
+  props: {
+    selected_element: {
+      type: Object as PropType<ElementData>,
+      default: () => ({})
+    }, 
+    elements: {
+      type: Object as PropType<ElementModel>,
+      default: () => ({})
+    },
+  },
   data() {
     return {
       show_dialog: false,
@@ -148,7 +158,8 @@ export default defineComponent({
       environment: window.location.hostname.includes(`localhost`) ? `/` : `/css-style-maker`,
       style: '',
       action: ``,
-      message: ``
+      message: ``,
+      projects: localStorage.getItem(`projects`) === undefined
     }
   },
   methods:{
@@ -161,7 +172,7 @@ export default defineComponent({
     },
     export_stylings() {
       if(!(Object.keys(this.elements).length > 0)){
-        return
+        return;
       }
       this.$emit("export-stylings");
     },

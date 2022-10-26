@@ -18,18 +18,18 @@
   </div>
 </section>
 </template>
-<script>
-export default {
+<script lang="ts">
+import { defineComponent, PropType } from 'vue';
+import { ElementModel } from 'src/interface';
+export default defineComponent({
   props: {
     elements: {
-      type: Object,
-      default() {
-        return {}
-      }
+      type: Object as PropType<ElementModel>,
+      default: () => ({})
     }
   },
   methods: {
-    select_layers(id) {
+    select_layers(id: string) {
       const selected = !this.elements[id].selected;
       if(selected){
         this.$emit('select-layers', id);
@@ -40,7 +40,7 @@ export default {
       this.$emit('display-data', id);
     }
   }
-}
+})
 </script>
 <style scoped>
 .layers{

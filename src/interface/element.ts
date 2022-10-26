@@ -8,6 +8,6 @@ export interface ElementData {
   class_name: string;
   text: string;
   index: number;
-  style_list: {[key:string]: string};
+  style_list: {[key:string]: {}};
   selected: boolean
 }

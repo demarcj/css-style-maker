@@ -20,16 +20,20 @@
     ></dialog-button>
   </dialog-content>
 </template>
-<script>
+<script lang="ts">
 import FontSize from "src/components/input/FontSize.vue";
 import FontWeight from "src/components/input/FontWeight.vue";
 
-export default {
+import { defineComponent } from 'vue';
+export default defineComponent({
   components: { 
     FontSize,
     FontWeight 
   },
-  props: ["message", "style"],
+  props: {
+    message: String,
+    style: String
+  },
   data() {
     return {
       user_input: ``,
@@ -42,11 +46,11 @@ export default {
       }
       this.$emit("update", this.user_input);
     },
-    update_input(input){
+    update_input(input: string){
       this.user_input = input;
     }
   }
-}
+})
 </script>
 <style scoped>
   .input-container{

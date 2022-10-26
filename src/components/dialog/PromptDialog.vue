@@ -16,14 +16,18 @@
     ></dialog-button>
   </dialog-content>
 </template>
-<script>
+<script lang="ts">
 import DialogContent from 'src/components/ui/DialogContent.vue';
-export default {
+import { defineComponent } from 'vue';
+export default defineComponent({
   components: { DialogContent },
   mounted() {
-    document.querySelector('#txt').focus();
+    const txt = document.querySelector('#txt') as HTMLElement;
+    txt.focus();
   },
-  props: ['message'],
+  props: {
+    message: String
+  },
   data() {
     return {
       user_input: ``,
@@ -36,11 +40,11 @@ export default {
       }
       this.$emit('update', this.user_input)
     },
-    check_input(event){
-      if(event.keyCode === 13){
+    check_input(event: KeyboardEvent){
+      if(event.code === `Enter`){
         return this.update();
       }
     }
   }
-}
+})
 </script>
