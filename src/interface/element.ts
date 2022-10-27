@@ -1,3 +1,7 @@
+export interface ProjectElement {
+  [key:string]: ElementModel;
+}
+
 export interface ElementModel {
   [key:string]: ElementData;
 }

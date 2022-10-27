@@ -5,7 +5,7 @@
     @keyup="update_input" 
     v-model="user_input"
   >
-  <select @select="select_unit" v-model="selected_unit">
+  <select @change="select_unit" v-model="selected_unit">
     <option v-for="unit in font_measuring_units" :key="unit" :value="unit">
       {{ unit }}
     </option>

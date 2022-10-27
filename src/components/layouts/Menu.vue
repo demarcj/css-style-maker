@@ -20,10 +20,10 @@
             </div>
           </li>
           <li :class="{'disabled-item': projects}">
-            <div @click="open_prompt(`Open project`, 'open-project')">Open Project</div>
+            <div @click="open_project_prompt(`Open project`, 'open-project')">Open Project</div>
           </li>
           <li :class="{'disabled-item': !(Object.keys(elements).length > 0)}">
-            <div @click="open_prompt(`Save this as...`, 'save')">Save</div>
+            <div @click="open_save_prompt(`Save this project over...`, 'save')">Save</div>
           </li>
           <li :class="{'disabled-item': !(Object.keys(elements).length > 0)}" >
             <a id="export" @click="export_stylings()">Export</a>
@@ -121,6 +121,20 @@
       @close="close"
       :message="message"
     ></basic-dialog>
+    <save-project-dialog 
+      v-if="show_save_project_dialog" 
+      :message="message"
+      :saved_projects="saved_projects"
+      @update="update_prompt_dialog"
+      @close="close"
+    ></save-project-dialog>
+    <open-project-dialog 
+      v-if="show_open_project_dialog" 
+      :message="message"
+      :saved_projects="saved_projects"
+      @update="update_prompt_dialog"
+      @close="close"
+    ></open-project-dialog>
     <confirm-dialog 
       v-if="show_confirm_dialog" 
       @close="close"
@@ -144,8 +158,14 @@
 </template>
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import { ElementModel, ElementData } from 'src/interface';
+import { ElementModel, ElementData, ProjectElement } from 'src/interface';
+import SaveProjectDialog from 'src/components/dialog/SaveProjectDialog.vue'
+import OpenProjectDialog from 'src/components/dialog/OpenProjectDialog.vue'
 export default defineComponent({
+  components: { 
+    SaveProjectDialog,
+    OpenProjectDialog
+  },
   props: {
     selected_element: {
       type: Object as PropType<ElementData>,
@@ -155,6 +175,10 @@ export default defineComponent({
       type: Object as PropType<ElementModel>,
       default: () => ({})
     },
+    saved_projects: {
+      type: Object as PropType<ProjectElement>,
+      default: () => ({})
+    }
   },
   data() {
     return {
@@ -163,6 +187,8 @@ export default defineComponent({
       show_prompt_dialog: false,
       show_style_dialog: false,
       show_menu_mobile: false,
+      show_save_project_dialog: false,
+      show_open_project_dialog: false,
       show_style: true,
       show_layers: true,
       open_list_index: undefined,
@@ -196,6 +222,16 @@ export default defineComponent({
       this.action = action;
       this.show_prompt_dialog = true;
     },
+    open_save_prompt(message: string, action: string) {
+      this.message = message;
+      this.action = action;
+      this.show_save_project_dialog = true;
+    },
+    open_project_prompt(message: string, action: string) {
+      this.message = message;
+      this.action = action;
+      this.show_open_project_dialog = true;
+    },
     open_confirm(message: string, action: string, disabled: boolean = false) {
       if(disabled){
         return;
@@ -226,6 +262,8 @@ export default defineComponent({
       this.show_confirm_dialog = false;
       this.show_style_dialog = false;
       this.show_prompt_dialog = false;
+      this.show_save_project_dialog = false;
+      this.show_open_project_dialog = false;
     },
     update_prompt_dialog(user_input: string){
       this.$emit(this.action, user_input);
@@ -267,6 +305,10 @@ header{
   background-color: #eee;
   color: #007acc
 }
+
+.menu li.disabled-item:hover{
+  background-color: #a2a2a2;
+}
 .menu li.disabled-item:hover{
   cursor: context-menu;
 }
@@ -280,6 +322,8 @@ header{
   inset: 100% auto auto 0;
   min-width: 100%;
   width: 150px;
+  box-shadow: var(--shadow);
+  -webkit-box-shadow: var(--shadow)
 }
 .menu ul ul{
   left: 100%;

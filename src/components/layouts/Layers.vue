@@ -3,6 +3,7 @@
   <div class="row table-header-row">
     <div class="cell table-header">Index</div>
     <div class="cell table-header">Element / Layer Name</div>
+    <div class="cell table-header">Timeline</div>
   </div>
   <div class="table-row">
     <div 
@@ -14,6 +15,7 @@
     >
       <div class="cell">{{ element.index }}</div> 
       <div class="cell">{{ element.name }}</div>
+      <div class="cell"></div>
     </div>
   </div>
 </section>
@@ -65,7 +67,7 @@ export default defineComponent({
 }
 .row{
   display: grid;
-  grid-template-columns: 75px 1fr;
+  grid-template-columns: 75px 25% 1fr;
   grid-template-rows: initial;
 }
 .row.selected{
@@ -84,6 +86,11 @@ export default defineComponent({
 }
 .row.table-header-row .cell{
   cursor: context-menu;
+  border-right: 1px solid white;
+}
+
+.row.table-header-row .cell:last-child{
+  border-right: none;
 }
 .table-header{
   padding-top: 10px;

@@ -3,6 +3,7 @@
   <Menu 
     :selected_element="selected_element"
     :elements="elements"
+    :saved_projects="saved_projects"
     @new-project="new_project"
     @open-project="open_project"
     @save="save"
@@ -38,7 +39,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { ElementModel, ElementData } from 'src/interface';
+import { ElementModel, ElementData, ProjectElement } from 'src/interface';
 import { window_types } from 'src/constants';
 import MainStage from 'src/components/layouts/MainStage.vue';
 import Menu from 'src/components/layouts/Menu.vue';
@@ -63,6 +64,7 @@ export default defineComponent({
     this.elements[id].selected = true;
     this.selected_element = this.elements[id];
     this.display_view(this.$route.path);
+    this.saved_projects = localStorage.getItem(`projects`) ? JSON.parse(localStorage.getItem(`projects`) as string) : {};
   },
   mounted() {
     const setKey = (e: KeyboardEvent, key: boolean) => {
@@ -88,6 +90,7 @@ export default defineComponent({
       selected_element: {} as ElementData,
       is_ctrl: false,
       windows: {},
+      saved_projects: {} as ProjectElement,
       show_page_view: false,
       show_window: {
         style: true,
@@ -105,11 +108,10 @@ export default defineComponent({
     },
     save(project_name: string) {
       let projects;
-      if(localStorage.getItem(`projects`)){
-        const get_projects = JSON.parse(JSON.stringify(localStorage.getItem(`projects`)));
+      if(this.saved_projects){
         projects = {
-          [project_name]: JSON.stringify(this.elements),
-          ...get_projects
+          ...this.saved_projects,
+          [project_name]: this.elements
         };
       } else {
         projects = {
@@ -117,10 +119,11 @@ export default defineComponent({
         }
       }
       localStorage.setItem(`projects`, JSON.stringify(projects));
+      this.saved_projects = projects;
     },
     open_project(project_name: string) {
-      const project = JSON.parse(localStorage.getItem(`projects`) as string);
-      this.elements = JSON.parse(project[project_name]);
+      const project = this.saved_projects[project_name];
+      this.elements = project;
     },
     export_stylings() {
       const parse_css = this.parse_css();
