@@ -15,6 +15,8 @@
   <div class="main-stage">
     <main-stage
       :elements="elements"
+      :is_ctrl="is_ctrl"
+      @mutant-elements="mutant_elements"
     ></main-stage>
     <styling-stage
       v-if="show_window.style"
@@ -22,9 +24,10 @@
     ></styling-stage>
   </div>
   <layers
+    v-if="show_window.layers"
     :elements="elements"
-    @select-layers="select_layers"
-    @deselect-layers="deselect_layers"
+    :is_ctrl="is_ctrl"
+    @mutant-elements="mutant_elements"
   ></layers>
   <Footer />
 </div>
@@ -61,6 +64,17 @@ export default defineComponent({
     this.selected_element = this.elements[id];
     this.display_view(this.$route.path);
   },
+  mounted() {
+    const setKey = (e: KeyboardEvent, key: boolean) => {
+      if(e.key.includes(`Control`)){
+        this.is_ctrl = key;
+      }
+    }
+    const setKeyup = (e: KeyboardEvent) => setKey(e, false);
+    const setKeydown = (e: KeyboardEvent) => setKey(e, true);
+    document.addEventListener(`keydown`, setKeydown);
+    document.addEventListener(`keyup`, setKeyup);
+  },
   components: {
     MainStage,
     Menu,
@@ -72,10 +86,12 @@ export default defineComponent({
     return {
       elements: {} as ElementModel,
       selected_element: {} as ElementData,
+      is_ctrl: false,
       windows: {},
       show_page_view: false,
       show_window: {
-        style: true
+        style: true,
+        layers: true
       },
 
     }
@@ -151,14 +167,6 @@ export default defineComponent({
       this.elements[this.selected_element.id].style_list[style] = user_input;
       this.selected_element.style_list[style] = user_input;
     },
-    select_layers(id: string) {
-      this.elements[id].selected = true;
-      this.get_element_data();
-    },
-    deselect_layers(id: string) {
-      this.elements[id].selected = false;
-      this.get_element_data();
-    },
     get_element_data() {
       if(!this.elements){
         return;
@@ -167,6 +175,15 @@ export default defineComponent({
       if(find_select.length === 1) {
         const selected_element = find_select[0];
         this.selected_element = {...this.elements[selected_element]};
+        return;
+      }
+      this.selected_element = {} as ElementData;
+    },
+    mutant_elements(elements_prop: ElementModel){
+      this.elements = elements_prop;
+      const element_key = Object.keys(this.elements).filter(id => this.elements[id].selected);
+      if(element_key.length === 1) {
+        this.selected_element = this.elements[element_key[0]];
         return;
       }
       this.selected_element = {} as ElementData;

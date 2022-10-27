@@ -10,7 +10,10 @@
           v-for="(value, key, index) in selected_element.style_list" 
           :key="index"
         >
-          {{ key }}: {{ value }}
+        <styling-input
+          :name="key"
+          :value="value.toString()"
+        ></styling-input>
         </div>
       </div>
     </div>

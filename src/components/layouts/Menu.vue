@@ -93,9 +93,18 @@
       <li>
         <div id="window" @click="display_menu_list(`window`)">Window</div>
         <ul>
-          <li>
+          <li 
+            :class="{'show-item': show_style}"
+            @click="show_style = !show_style"
+          >
             <div @click="$emit('display-window', 'style')">Style</div>
           </li>
+          <!-- <li 
+              :class="{'show-item':show_layers}"
+              @click="show_layers = !show_layers"
+            >
+            <div @click="$emit('display-window', 'layers')">Layers</div>
+          </li> -->
         </ul>
       </li>
       <li>
@@ -154,6 +163,8 @@ export default defineComponent({
       show_prompt_dialog: false,
       show_style_dialog: false,
       show_menu_mobile: false,
+      show_style: true,
+      show_layers: true,
       open_list_index: undefined,
       environment: window.location.hostname.includes(`localhost`) ? `/` : `/css-style-maker`,
       style: '',
@@ -273,6 +284,9 @@ header{
 .menu ul ul{
   left: 100%;
   top: 0;
+}
+.show-item, .show-item:hover{
+  border-right: 5px solid red;
 }
 .menu a{display: block;}
 .mobile-menu{

@@ -1,1 +1,2 @@
-export * from './window-type'
+export * from './style-type';
+export * from './window-type';

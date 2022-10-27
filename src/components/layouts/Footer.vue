@@ -7,9 +7,7 @@
 import { defineComponent } from 'vue';
 export default defineComponent({
   methods: {
-    get_year() {
-      return new Date().getFullYear();
-    }
+    get_year: () => new Date().getFullYear()
   }
 });
 </script>

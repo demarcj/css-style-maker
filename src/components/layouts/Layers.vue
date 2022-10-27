@@ -10,7 +10,7 @@
       v-for="element in elements"
       :key="element.id"
       :class="{selected: element.selected}"
-      @click="select_layers( element.id )" 
+      @click="select_layers(element)" 
     >
       <div class="cell">{{ element.index }}</div> 
       <div class="cell">{{ element.name }}</div>
@@ -20,24 +20,28 @@
 </template>
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import { ElementModel } from 'src/interface';
+import { ElementModel, ElementData } from 'src/interface';
 export default defineComponent({
   props: {
     elements: {
       type: Object as PropType<ElementModel>,
       default: () => ({})
+    },
+    is_ctrl: Boolean
+  },
+  data() {
+    return {
+      elements_prop: {} as ElementModel
     }
   },
   methods: {
-    select_layers(id: string) {
-      const selected = !this.elements[id].selected;
-      if(selected){
-        this.$emit('select-layers', id);
-      }
-      if(!selected){
-        this.$emit('deselect-layers', id);
-      }
-      this.$emit('display-data', id);
+    select_layers(element: ElementData) {
+      this.elements_prop = this.elements;
+      if(!this.is_ctrl){
+        Object.keys(this.elements_prop).map(id => this.elements_prop[id].selected = false);
+      } 
+      this.elements_prop[element.id].selected = !element.selected;
+      this.$emit(`mutant-elements`, this.elements_prop);
     }
   }
 })

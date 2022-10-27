@@ -1,0 +1,1 @@
+export type style_types = `font-size` | `font-weight`

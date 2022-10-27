@@ -7,6 +7,7 @@ import ConfirmDialog from 'src/components/dialog/ConfirmDialog.vue';
 import StyleDialog from 'src/components/dialog/StyleDialog.vue';
 import DialogButton from 'src/components/ui/DialogButton.vue';
 import DialogContent from 'src/components/ui/DialogContent.vue';
+import StylingInput from 'src/components/ui/StylingInput.vue';
 import ViewContent from 'src/components/ui/ViewContent.vue';
 import App from 'src/App.vue';
 import router from 'src/router'
@@ -22,6 +23,7 @@ app.component('style-dialog', StyleDialog);
 //  UI
 app.component('dialog-button', DialogButton);
 app.component('dialog-content', DialogContent);
+app.component('styling-input', StylingInput);
 app.component('view-content', ViewContent);
 
 app.use(ElementPlus);

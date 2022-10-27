@@ -1,1 +1,1 @@
-export type window_types = `style`;
+export type window_types = `style` | `layers`;

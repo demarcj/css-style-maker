@@ -2,28 +2,32 @@
 <section id="canvas" class="canvas">
   <div 
     v-for="element in elements"
-    class="element-container" 
-    :class="element.class_name"
+    class="element-container"
+    @click="select_stage_element(element)" 
+    :id="element.id"
+    :class="{[element.class_name]: element.class_name, selected: element.selected}"
     :key="element.id"
+    :style="parseStyling(element.style_list)" 
   >
-    <div 
-      class="element" 
-      :style="parseStyling(element.style_list)" 
-    >
-      {{ element.text }}
-    </div> 
+    {{ element.text }}
   </div>
 </section>
 </template>
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import { ElementModel } from 'src/interface';
+import { ElementModel, ElementData } from 'src/interface';
 export default defineComponent({
+  data() {
+    return {
+      elements_prop: {} as ElementModel
+    }
+  },
   props: {
     elements: {
       type: Object as PropType<ElementModel>,
       default: () => ({})
-    }
+    },
+    is_ctrl: Boolean,
   },
   methods: {
     parseStyling(style_list: {[key:string]: {}}): {} {
@@ -36,17 +40,28 @@ export default defineComponent({
         return obj;
       });
       return stylings;
+    },
+    select_stage_element(element: ElementData) {
+      this.elements_prop = this.elements;
+      if(!this.is_ctrl){
+        Object.keys(this.elements_prop).forEach(id => {
+          this.elements_prop[id].selected = false;
+        });
+      } 
+      this.elements_prop[element.id].selected = !element.selected;
+      this.$emit(`mutant-elements`, this.elements_prop);
     }
   }
 })
 </script>
 <style scoped>
-.element{
-  display: inline-block;
+.selected{
+  outline: 2px dashed var(--secondary);
 }
 .canvas{
   max-width: 100%;
-  height: 500px;
+  min-height: 500px;
+  height: 100%;
   color: black;
   background-color: white;
   overflow: hidden;
