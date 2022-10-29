@@ -14,18 +14,18 @@
       <li>
         <div id="project" @click="display_menu_list(`project`)">Project</div>
         <ul>
-          <li :class="{'disabled-item': !(Object.keys(elements).length > 0)}" >
-            <div @click="open_confirm('Are you sure you want to start a new project?', 'new-project', !(Object.keys(elements).length > 0))" >
+          <li :class="{'disabled-item': !Object.keys(elements).length }" >
+            <div @click="open_confirm('Are you sure you want to start a new project?', 'new-project')" >
               New Project
             </div>
           </li>
-          <li :class="{'disabled-item': projects}">
+          <li :class="{'disabled-item': !Object.keys(saved_projects).length }">
             <div @click="open_project_prompt(`Open project`, 'open-project')">Open Project</div>
           </li>
-          <li :class="{'disabled-item': !(Object.keys(elements).length > 0)}">
+          <li :class="{'disabled-item': !Object.keys(elements).length }">
             <div @click="open_save_prompt(`Save this project over...`, 'save')">Save</div>
           </li>
-          <li :class="{'disabled-item': !(Object.keys(elements).length > 0)}" >
+          <li :class="{'disabled-item': !Object.keys(elements).length }" >
             <a id="export" @click="export_stylings()">Export</a>
           </li>
         </ul>
@@ -38,7 +38,7 @@
           <li>History</li> -->
           <li 
             @click="delete_layers()" 
-            :class="{'disabled-item': !(Object.keys(selected_element).length > 0)}"
+            :class="{'disabled-item': !Object.keys(selected_element).length }"
           >
             <div>Delete Element</div>
           </li>
