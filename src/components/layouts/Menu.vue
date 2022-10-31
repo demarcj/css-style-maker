@@ -33,9 +33,29 @@
       <li>
         <div id="edit" @click="display_menu_list(`edit`)">Edit</div>
         <ul>
-          <!-- <li>Undo</li>
-          <li>Redo</li>
-          <li>History</li> -->
+          <li
+            :class="{'disabled-item': !project_history.length }"
+          >
+            <div>Undo {{ project_history.length ? project_history[history_index].action : `` }}</div>
+          </li>
+          <li
+            :class="{'disabled-item': project_history.length < 2 }"
+          >
+            <div>Redo {{ project_history.length > 1 ? project_history[history_index + 1].action : `` }}</div>
+          </li>
+          <li
+            :class="{'disabled-item': !project_history.length }"
+          >
+            <div>History</div>
+            <ul>
+              <li 
+                v-for="(project, index) in project_history"
+                :key="index"
+              >
+                <div>{{ project.action }}</div> 
+              </li>
+            </ul>
+          </li>
           <li 
             @click="delete_layers()" 
             :class="{'disabled-item': !Object.keys(selected_element).length }"
@@ -99,12 +119,12 @@
           >
             <div @click="$emit('display-window', 'style')">Style</div>
           </li>
-          <!-- <li 
+          <li 
               :class="{'show-item':show_layers}"
               @click="show_layers = !show_layers"
             >
             <div @click="$emit('display-window', 'layers')">Layers</div>
-          </li> -->
+          </li>
         </ul>
       </li>
       <li>
@@ -158,10 +178,13 @@
 </template>
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import { ElementModel, ElementData, ProjectElement } from 'src/interface';
+import { ElementModel, ElementData, ProjectElement, ProjectHistory } from 'src/interface';
 import SaveProjectDialog from 'src/components/dialog/SaveProjectDialog.vue'
 import OpenProjectDialog from 'src/components/dialog/OpenProjectDialog.vue'
 export default defineComponent({
+  created() {
+    console.log(this.project_history, this.project_history.length)
+  },
   components: { 
     SaveProjectDialog,
     OpenProjectDialog
@@ -178,6 +201,14 @@ export default defineComponent({
     saved_projects: {
       type: Object as PropType<ProjectElement>,
       default: () => ({})
+    },
+    project_history: {
+      type: Array as PropType<ProjectHistory[]>,
+      default: () => ([])
+    },
+    history_index: {
+      type: Number,
+      default: 0
     }
   },
   data() {
@@ -232,10 +263,7 @@ export default defineComponent({
       this.action = action;
       this.show_open_project_dialog = true;
     },
-    open_confirm(message: string, action: string, disabled: boolean = false) {
-      if(disabled){
-        return;
-      }
+    open_confirm(message: string, action: string) {
       this.message = message;
       this.action = action;
       this.show_confirm_dialog = true;
@@ -281,9 +309,7 @@ export default defineComponent({
 })
 </script>
 <style scoped>
-header{
-  background: var(--background);
-}
+header{ background: var(--background); }
 .menu{
   display: flex;
   flex-direction: row;
@@ -295,33 +321,23 @@ header{
   white-space: nowrap;
   display: block;
 }
-.menu li div, .menu li a {
-  padding: 10px;
-} 
-.menu li:hover{
-  background-color: #007acc;
-}
+.menu li div, .menu li a { padding: 10px; } 
+.menu li:hover{ background-color: #007acc; }
 .menu li.disabled-item{
   background-color: #eee;
   color: #007acc
 }
 
-.menu li.disabled-item:hover{
-  background-color: #a2a2a2;
-}
-.menu li.disabled-item:hover{
-  cursor: context-menu;
-}
-.menu li.disabled-item:hover ul {
-  display: none;
-}
+.menu li.disabled-item:hover{ background-color: #a2a2a2; }
+.menu li.disabled-item:hover{ cursor: context-menu; }
+.menu li.disabled-item:hover ul { display: none; }
 .menu ul{
   display: none;
   position: absolute;
   background: var(--background);
   inset: 100% auto auto 0;
-  min-width: 100%;
-  width: 150px;
+  min-width: 150px;
+  width: fit-content;
   box-shadow: var(--shadow);
   -webkit-box-shadow: var(--shadow)
 }
@@ -329,9 +345,7 @@ header{
   left: 100%;
   top: 0;
 }
-.show-item, .show-item:hover{
-  border-right: 5px solid red;
-}
+.show-item, .show-item:hover{ border-right: 5px solid red; }
 .menu a{display: block;}
 .mobile-menu{
   display: none;

@@ -53,6 +53,7 @@ export default defineComponent({
   overflow: hidden;
   display: grid;
   grid-template-rows: auto 1fr;
+  flex: 1;
 }
 .divider{
   background-color: black;

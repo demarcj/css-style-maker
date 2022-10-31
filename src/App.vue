@@ -4,6 +4,8 @@
     :selected_element="selected_element"
     :elements="elements"
     :saved_projects="saved_projects"
+    :project_history="project_history"
+    :history_index="history_index"
     @new-project="new_project"
     @open-project="open_project"
     @save="save"
@@ -39,7 +41,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { ElementModel, ElementData, ProjectElement } from 'src/interface';
+import { ElementModel, ElementData, ProjectElement, ProjectHistory } from 'src/interface';
 import { window_types } from 'src/constants';
 import MainStage from 'src/components/layouts/MainStage.vue';
 import Menu from 'src/components/layouts/Menu.vue';
@@ -91,6 +93,8 @@ export default defineComponent({
       is_ctrl: false,
       windows: {},
       saved_projects: {} as ProjectElement,
+      project_history: [] as ProjectHistory[],
+      history_index: 0,
       show_page_view: false,
       show_window: {
         style: true,
@@ -146,22 +150,17 @@ export default defineComponent({
       `;
     }, 
     new_text(user_input: string) {
-      if(user_input === ''){
-        return;
-      }
       const id: string = uuid();
       const size = Object.keys(this.elements).length ? Object.keys(this.elements).length : 0; 
       this.elements[id] = {} as ElementData;
       this.elements[id].id = id;
       this.elements[id].name = user_input;
-      this.elements[id].class_name = this.get_class_name(user_input);
+      this.elements[id].class_name = user_input;
       this.elements[id].text = user_input;
       this.elements[id].index = size;
       this.elements[id].style_list = {};
       this.elements[id].selected = false;
-    },
-    get_class_name(txt: string) {
-      return txt.replaceAll(` `, `-`)
+      this.add_to_history(`Create text element`);
     },
     set_style(user_input: string, style: string) {
       if(user_input === null){
@@ -169,6 +168,7 @@ export default defineComponent({
       }
       this.elements[this.selected_element.id].style_list[style] = user_input;
       this.selected_element.style_list[style] = user_input;
+      this.add_to_history(`Set ${style.replaceAll(` `, `-`)} style`);
     },
     get_element_data() {
       if(!this.elements){
@@ -192,6 +192,7 @@ export default defineComponent({
       this.selected_element = {} as ElementData;
     },
     delete_layers() {
+      this.add_to_history(`Delete layer`);
       Object.keys(this.elements).forEach(id => {
         if(this.elements[id].selected){
           delete this.elements[id]
@@ -211,6 +212,13 @@ export default defineComponent({
     },
     display_view(path: string) {
       this.show_page_view = path !== `/` && !path.includes(`css-style-maker`);
+    },
+    add_to_history(history_action: string) {
+      const history_obj = { 
+        action: history_action,
+        project: this.elements
+      };
+      this.project_history = [...this.project_history, history_obj];
     }
   },
   watch: {
@@ -233,26 +241,21 @@ export default defineComponent({
   height: 100vh;
 }
 .app-body{
-  display: grid;
-  grid-template-rows: auto auto 1fr auto;
-}
-.main-stage{
   display: flex;
+  flex-direction: column;
 }
-.page-view{
-  width: 50vw;
+.main-stage{ 
+  display: flex;
+  flex: 1;
 }
+.page-view{ width: 50vw; }
 @media screen and (max-width: 960px) {
   #app{
     height: auto;
     grid-template-columns: 1fr;
   }
-  .main-stage {
-    display: block;
-  }
-  .app-body{
-    order: 2;
-  }
+  .main-stage { display: block; }
+  .app-body{ order: 2; }
   .page-view{
     order: 1;
     width: 100%;

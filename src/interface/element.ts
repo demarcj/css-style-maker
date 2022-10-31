@@ -2,6 +2,11 @@ export interface ProjectElement {
   [key:string]: ElementModel;
 }
 
+export interface ProjectHistory {
+  action: string;
+  project: ElementModel;
+}
+
 export interface ElementModel {
   [key:string]: ElementData;
 }
