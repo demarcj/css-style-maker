@@ -13,6 +13,7 @@
     @export-stylings="export_stylings"
     @delete-layers="delete_layers"
     @display-window="display_window"
+    @to-history="go_to_history"
     @set-style="set_style"
   />
   <div class="main-stage">
@@ -52,6 +53,30 @@ import { v4 as uuid } from 'uuid';
 import './style.css';
 
 export default defineComponent({
+  components: {
+    MainStage,
+    Menu,
+    Layers,
+    StylingStage,
+    Footer
+  },
+  data() {
+    return {
+      elements: {} as ElementModel,
+      selected_element: {} as ElementData,
+      is_ctrl: false,
+      windows: {},
+      saved_projects: {} as ProjectElement,
+      project_history: [] as ProjectHistory[],
+      rewrite_history_mode: false,
+      history_index: 0,
+      show_page_view: false,
+      show_window: {
+        style: true,
+        layers: true
+      },
+    }
+  },
   created() {
     const id = uuid();
     this.elements[id] = {} as ElementData;
@@ -79,30 +104,6 @@ export default defineComponent({
     document.addEventListener(`keydown`, setKeydown);
     document.addEventListener(`keyup`, setKeyup);
   },
-  components: {
-    MainStage,
-    Menu,
-    Layers,
-    StylingStage,
-    Footer
-  },
-  data() {
-    return {
-      elements: {} as ElementModel,
-      selected_element: {} as ElementData,
-      is_ctrl: false,
-      windows: {},
-      saved_projects: {} as ProjectElement,
-      project_history: [] as ProjectHistory[],
-      history_index: 0,
-      show_page_view: false,
-      show_window: {
-        style: true,
-        layers: true
-      },
-
-    }
-  },
   methods: {
     new_project(confirmation: boolean) {
       if(confirmation){
@@ -128,6 +129,11 @@ export default defineComponent({
     open_project(project_name: string) {
       const project = this.saved_projects[project_name];
       this.elements = project;
+    },
+    go_to_history(index: number) {
+      this.history_index = index;
+      this.rewrite_history_mode = this.history_index < (this.project_history.length - 1);
+      this.elements = JSON.parse(JSON.stringify(this.project_history[index].project));
     },
     export_stylings() {
       const parse_css = this.parse_css();
@@ -168,7 +174,7 @@ export default defineComponent({
       }
       this.elements[this.selected_element.id].style_list[style] = user_input;
       this.selected_element.style_list[style] = user_input;
-      this.add_to_history(`Set ${style.replaceAll(` `, `-`)} style`);
+      this.add_to_history(`Set ${style.replaceAll(`-`, ` `)} style`);
     },
     get_element_data() {
       if(!this.elements){
@@ -216,8 +222,14 @@ export default defineComponent({
     add_to_history(history_action: string) {
       const history_obj = { 
         action: history_action,
-        project: this.elements
+        project: JSON.parse(JSON.stringify(this.elements))
       };
+
+      if(this.rewrite_history_mode){
+        this.project_history = this.project_history.filter((project, index) => index <= this.history_index);
+        this.rewrite_history_mode = false;
+      }
+      
       this.project_history = [...this.project_history, history_obj];
     }
   },

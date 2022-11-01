@@ -33,26 +33,25 @@
       <li>
         <div id="edit" @click="display_menu_list(`edit`)">Edit</div>
         <ul>
-          <li
-            :class="{'disabled-item': !project_history.length }"
-          >
+          <li :class="{'disabled-item': !project_history.length }" >
             <div>Undo {{ project_history.length ? project_history[history_index].action : `` }}</div>
           </li>
-          <li
-            :class="{'disabled-item': project_history.length < 2 }"
-          >
-            <div>Redo {{ project_history.length > 1 ? project_history[history_index + 1].action : `` }}</div>
+          <li :class="{'disabled-item': !project_history.length }" >
+            <div>Redo {{ project_history.length ? project_history[project_history.length - 1].action : `` }}</div>
           </li>
-          <li
-            :class="{'disabled-item': !project_history.length }"
-          >
+          <li :class="{'disabled-item': !project_history.length }" >
             <div>History</div>
             <ul>
               <li 
                 v-for="(project, index) in project_history"
                 :key="index"
+                @click="go_to_history(index)"
               >
                 <div>{{ project.action }}</div> 
+                <div 
+                  class="history-line" 
+                  v-if="history_index === index && show_history_line"
+                ></div>
               </li>
             </ul>
           </li>
@@ -182,9 +181,6 @@ import { ElementModel, ElementData, ProjectElement, ProjectHistory } from 'src/i
 import SaveProjectDialog from 'src/components/dialog/SaveProjectDialog.vue'
 import OpenProjectDialog from 'src/components/dialog/OpenProjectDialog.vue'
 export default defineComponent({
-  created() {
-    console.log(this.project_history, this.project_history.length)
-  },
   components: { 
     SaveProjectDialog,
     OpenProjectDialog
@@ -222,6 +218,7 @@ export default defineComponent({
       show_open_project_dialog: false,
       show_style: true,
       show_layers: true,
+      show_history_line: false,
       open_list_index: undefined,
       environment: window.location.hostname.includes(`localhost`) ? `/` : `/css-style-maker`,
       style: '',
@@ -237,6 +234,10 @@ export default defineComponent({
     display_menu_list(id: string) {
       const element = document.querySelector(`#${id} ~ ul`) as HTMLElement;
       element.classList.toggle("opened-list")
+    },
+    go_to_history(index: number) {
+      this.show_history_line = !(index === (this.project_history.length - 1));
+      this.$emit(`to-history`, index);
     },
     export_stylings() {
       if(!(Object.keys(this.elements).length > 0)){
@@ -351,6 +352,11 @@ header{ background: var(--background); }
   display: none;
   cursor: pointer;
   padding: 5px;
+}
+.menu .history-line{
+  background-color: white;
+  height: 2px;
+  padding: 0;
 }
 @media screen and (min-width: 961px) {
   .menu li:hover>ul{display: block;} 
