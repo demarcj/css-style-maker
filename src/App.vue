@@ -6,6 +6,7 @@
     :saved_projects="saved_projects"
     :project_history="project_history"
     :history_index="history_index"
+    :history_state="history_state"
     @new-project="new_project"
     @open-project="open_project"
     @save="save"
@@ -14,6 +15,7 @@
     @delete-layers="delete_layers"
     @display-window="display_window"
     @to-history="go_to_history"
+    @add-to-index="add_to_index"
     @set-style="set_style"
   />
   <div class="main-stage">
@@ -63,11 +65,13 @@ export default defineComponent({
   data() {
     return {
       elements: {} as ElementModel,
+      default_element: {} as ProjectHistory,
       selected_element: {} as ElementData,
       is_ctrl: false,
       windows: {},
       saved_projects: {} as ProjectElement,
       project_history: [] as ProjectHistory[],
+      history_state: ``,
       rewrite_history_mode: false,
       history_index: 0,
       show_page_view: false,
@@ -89,6 +93,10 @@ export default defineComponent({
       'font-size': `32px`
     };
     this.elements[id].selected = true;
+    this.default_element.id = uuid();
+    this.default_element.action = `Default`;
+    this.history_state = this.default_element.id;
+    this.default_element.project = JSON.parse(JSON.stringify(this.elements));
     this.selected_element = this.elements[id];
     this.display_view(this.$route.path);
     this.saved_projects = localStorage.getItem(`projects`) ? JSON.parse(localStorage.getItem(`projects`) as string) : {};
@@ -130,11 +138,6 @@ export default defineComponent({
       const project = this.saved_projects[project_name];
       this.elements = project;
     },
-    go_to_history(index: number) {
-      this.history_index = index;
-      this.rewrite_history_mode = this.history_index < (this.project_history.length - 1);
-      this.elements = JSON.parse(JSON.stringify(this.project_history[index].project));
-    },
     export_stylings() {
       const parse_css = this.parse_css();
       const canvas = document.querySelector("#canvas") as HTMLElement;
@@ -174,7 +177,7 @@ export default defineComponent({
       }
       this.elements[this.selected_element.id].style_list[style] = user_input;
       this.selected_element.style_list[style] = user_input;
-      this.add_to_history(`Set ${style.replaceAll(`-`, ` `)} style`);
+      this.add_to_history(`${style.replaceAll(`-`, ` `)} style`);
     },
     get_element_data() {
       if(!this.elements){
@@ -219,18 +222,27 @@ export default defineComponent({
     display_view(path: string) {
       this.show_page_view = path !== `/` && !path.includes(`css-style-maker`);
     },
+    go_to_history(project: ProjectHistory | undefined) {
+      this.elements = project ? JSON.parse(JSON.stringify(project.project)) : JSON.parse(JSON.stringify(this.default_element.project));
+      this.history_state = project ? project.id : this.default_element.id;
+      // this.history_index = index < 0 ? 0 : index;
+      // this.rewrite_history_mode = index < (this.project_history.length - 1);
+    },
+    add_to_index(history_index: number){
+      this.history_index = history_index >= this.project_history.length ? this.project_history.length : history_index;
+    },
     add_to_history(history_action: string) {
       const history_obj = { 
         action: history_action,
+        id: uuid(),
         project: JSON.parse(JSON.stringify(this.elements))
       };
-
       if(this.rewrite_history_mode){
         this.project_history = this.project_history.filter((project, index) => index <= this.history_index);
         this.rewrite_history_mode = false;
       }
-      
       this.project_history = [...this.project_history, history_obj];
+      this.history_state = history_obj.id;
     }
   },
   watch: {

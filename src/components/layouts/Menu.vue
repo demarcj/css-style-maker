@@ -33,28 +33,39 @@
       <li>
         <div id="edit" @click="display_menu_list(`edit`)">Edit</div>
         <ul>
-          <li :class="{'disabled-item': !project_history.length }" >
-            <div>Undo {{ project_history.length ? project_history[history_index].action : `` }}</div>
+          <!-- <li 
+            :class="{'disabled-item': !project_history.length }"
+            @click="undo()" 
+          >
+            <div>Undo {{ project_history.length ? project_history[project_history.length - 1 < 0 ? 0 : project_history.length - 1].action : `` }}</div>
           </li>
-          <li :class="{'disabled-item': !project_history.length }" >
-            <div>Redo {{ project_history.length ? project_history[project_history.length - 1].action : `` }}</div>
-          </li>
-          <li :class="{'disabled-item': !project_history.length }" >
+          <li 
+            :class="{'disabled-item': !history_mode }" 
+            @click="redo()" 
+          >
+            <div>Redo {{ history_mode ? project_history[history_index].action : `` }}</div>
+          </li> -->
+          <!-- <li :class="{'disabled-item': !project_history.length }" >
             <div>History</div>
             <ul>
               <li 
                 v-for="(project, index) in project_history"
                 :key="index"
-                @click="go_to_history(index)"
+                @click="go_to_history(project)"
               >
-                <div>{{ project.action }}</div> 
+                <div>{{ index <= history_index ? `Undo` : `Redo` }} {{ project.action }}</div> 
                 <div 
                   class="history-line" 
-                  v-if="history_index === index && show_history_line"
+                  v-if="history_index === index && show_history"
                 ></div>
               </li>
+              <li
+                v-if="project_history.length"
+                @click="redo()">
+                <div>Redo {{ project_history[project_history.length - 1].action }}</div>
+              </li>
             </ul>
-          </li>
+          </li> -->
           <li 
             @click="delete_layers()" 
             :class="{'disabled-item': !Object.keys(selected_element).length }"
@@ -205,6 +216,10 @@ export default defineComponent({
     history_index: {
       type: Number,
       default: 0
+    },
+    history_state: {
+      type: String,
+      default: ``
     }
   },
   data() {
@@ -218,7 +233,8 @@ export default defineComponent({
       show_open_project_dialog: false,
       show_style: true,
       show_layers: true,
-      show_history_line: false,
+      show_history: false,
+      history_mode: false,
       open_list_index: undefined,
       environment: window.location.hostname.includes(`localhost`) ? `/` : `/css-style-maker`,
       style: '',
@@ -235,9 +251,32 @@ export default defineComponent({
       const element = document.querySelector(`#${id} ~ ul`) as HTMLElement;
       element.classList.toggle("opened-list")
     },
-    go_to_history(index: number) {
-      this.show_history_line = !(index === (this.project_history.length - 1));
-      this.$emit(`to-history`, index);
+    go_to_history(project: ProjectHistory) {
+      // this.show_history = !(index === (this.project_history.length - 1));
+      // this.history_mode = !(index === this.project_history.length);
+      this.history_mode = true;
+      let find_project;
+      const find_index = this.project_history.findIndex(local_project => local_project.id.includes(project.id));
+      if(find_index){
+        find_project = this.project_history[find_index - 1]
+      }
+      this.$emit(`to-history`, find_project);
+    },
+    undo(){
+      let project;
+      const find_index = this.project_history.findIndex(project => project.id.includes(this.history_state));
+      if(find_index >= 1){
+        project = this.project_history[find_index - 1];
+      }
+      this.$emit(`to-history`, project);
+    },
+    redo(){
+      let project;
+      const find_index = this.project_history.findIndex(project => project.id.includes(this.history_state));
+      if(find_index < this.project_history.length){
+        project = this.project_history[find_index];
+      }
+      this.$emit(`to-history`, project);
     },
     export_stylings() {
       if(!(Object.keys(this.elements).length > 0)){
@@ -260,16 +299,25 @@ export default defineComponent({
       this.show_save_project_dialog = true;
     },
     open_project_prompt(message: string, action: string) {
+      if(!(Object.keys(this.elements).length > 0)){
+        return;
+      }
       this.message = message;
       this.action = action;
       this.show_open_project_dialog = true;
     },
     open_confirm(message: string, action: string) {
+      if(!Object.keys(this.elements).length) {
+        return;
+      }
       this.message = message;
       this.action = action;
       this.show_confirm_dialog = true;
     },
     open_style(message: string, style: string){
+      if(!this.selected_element){
+        return;
+      }
       this.message = message;
       this.style = style;
       this.show_style_dialog = true;
@@ -326,7 +374,7 @@ header{ background: var(--background); }
 .menu li:hover{ background-color: #007acc; }
 .menu li.disabled-item{
   background-color: #eee;
-  color: #007acc
+  color: #007acc;
 }
 
 .menu li.disabled-item:hover{ background-color: #a2a2a2; }

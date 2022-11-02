@@ -4,6 +4,7 @@ export interface ProjectElement {
 
 export interface ProjectHistory {
   action: string;
+  id: string;
   project: ElementModel;
 }
 
