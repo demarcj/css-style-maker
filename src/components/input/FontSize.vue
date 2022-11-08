@@ -5,11 +5,11 @@
     @keyup="update_input" 
     v-model="user_input"
   >
-  <select @change="select_unit" v-model="selected_unit">
+  <!-- <select @change="select_unit" v-model="selected_unit">
     <option v-for="unit in font_measuring_units" :key="unit" :value="unit">
       {{ unit }}
     </option>
-  </select>
+  </select> -->
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue';
@@ -22,7 +22,7 @@ export default defineComponent({
   data() {
     return {
       user_input: ``,
-      font_measuring_units: [`px`, `rem`, `em`, `percentage`, `vh`, `vw`],
+      // font_measuring_units: [`px`, `rem`, `em`, `%`, `vh`, `vw`],
       selected_unit: `px`
     };
   },
@@ -35,7 +35,7 @@ export default defineComponent({
         return;
       }
       this.$emit("update_input", this.user_input + this.selected_unit);
-      if(event.key === `Enter`){
+      if(event.key.includes(`Enter`)){
         this.$emit('update');
       }
     }

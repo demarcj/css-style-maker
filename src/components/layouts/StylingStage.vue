@@ -12,7 +12,8 @@
         >
         <styling-input
           :name="key"
-          :value="value.toString()"
+          :value="value"
+          @change-value="change_value"
         ></styling-input>
         </div>
       </div>
@@ -23,10 +24,16 @@
 import { defineComponent, PropType } from 'vue';
 import { ElementData } from 'src/interface';
 export default defineComponent({
+  emits: ['change-value'],
   props: {
     selected_element: {
       type: Object as PropType<ElementData>,
       default: () => ({})
+    }
+  },
+  methods: {
+    change_value(key: string, value: string){
+      this.$emit("change-value", key, value);
     }
   }
 });

@@ -1,7 +1,7 @@
 <template>
 <section id="canvas" class="canvas">
   <div 
-    v-for="element in elements"
+    v-for="element in sort_element()"
     class="element-container"
     @click="select_stage_element(element)" 
     :id="element.id"
@@ -19,7 +19,8 @@ import { ElementModel, ElementData } from 'src/interface';
 export default defineComponent({
   data() {
     return {
-      elements_prop: {} as ElementModel
+      elements_prop: {} as ElementModel,
+      elements_list: [] as ElementData[]
     }
   },
   props: {
@@ -41,6 +42,11 @@ export default defineComponent({
       });
       return stylings;
     },
+    sort_element(){
+      return Object.keys(this.elements)
+      .map(key => this.elements[key])
+      .sort((a, b) => a.index - b.index);
+    },
     select_stage_element(element: ElementData) {
       this.elements_prop = this.elements;
       if(!this.is_ctrl){
@@ -49,7 +55,7 @@ export default defineComponent({
         });
       } 
       this.elements_prop[element.id].selected = !element.selected;
-      this.$emit(`mutant-elements`, this.elements_prop);
+      this.$emit(`selected-element`, this.elements_prop);
     }
   }
 })

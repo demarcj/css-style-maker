@@ -25,7 +25,7 @@ export default defineComponent({
         return;
       }
       this.$emit("update_input", this.user_input);
-      if(event.code === `Enter`){
+      if(event.key.includes(`Enter`)){
         this.$emit('update');
       }
     }

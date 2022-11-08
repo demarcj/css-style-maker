@@ -66,7 +66,7 @@ export default defineComponent({
       this.$emit('update', this.user_input)
     },
     check_input(event: KeyboardEvent){
-      if(event.code === `Enter`){
+      if(event.key.includes(`Enter`)){
         return this.update();
       }
     },

@@ -8,7 +8,7 @@
   <div class="table-row">
     <div 
       class="row"
-      v-for="element in elements"
+      v-for="element in sort_element()"
       :key="element.id"
       :class="{selected: element.selected}"
       @click="select_layers(element)" 
@@ -43,8 +43,13 @@ export default defineComponent({
         Object.keys(this.elements_prop).map(id => this.elements_prop[id].selected = false);
       } 
       this.elements_prop[element.id].selected = !element.selected;
-      this.$emit(`mutant-elements`, this.elements_prop);
-    }
+      this.$emit(`selected-element`, this.elements_prop);
+    },
+    sort_element(){
+      return Object.keys(this.elements)
+        .map(key => this.elements[key])
+        .sort((a, b) => a.index - b.index);
+    },
   }
 })
 </script>

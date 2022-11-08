@@ -2,21 +2,33 @@
   <fieldset>
     <legend class="legend"> {{ name }}: </legend>
     <div class="fieldset-content"> 
-      <input 
-        :type="input_type" 
-        :value="real_data"
-        :min="min"
-        :max="max"
-        :step="step"
-        @change="changed_value($event)" 
+      <font-size-menu 
+        v-if="name.includes('font-size')"
+        :name="name"
+        :value="value"
+        @change-value="change_value"
       >
-      <div class="value"> {{ full_data }} </div>
+      </font-size-menu>
+      <font-weight-menu 
+        v-if="name.includes('font-weight')"
+        :name="name"
+        :value="value"
+        @change-value="change_value"
+      >
+      </font-weight-menu>
     </div>
   </fieldset>
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue';
+import FontSizeMenu from 'src/components/style-menu-ui/FontSizeMenu.vue'
+import FontWeightMenu from 'src/components/style-menu-ui/FontWeightMenu.vue'
 export default defineComponent({
+  emits: ['change-value'],
+  components: { 
+    FontSizeMenu,
+    FontWeightMenu
+  },
   props: {
     name: {
       type: String,
@@ -26,47 +38,10 @@ export default defineComponent({
       type: String, 
       default: `` 
     }
-  },
-  data(){
-    return {
-      real_data: ``,
-      full_data: ``,
-      input_type: ``,
-      step: 1,
-      min: 0,
-      max: 1000
-    }
-  },
-  mounted() {
-    this.get_data();
-  },
+  }, 
   methods: {
-    changed_value(e: Event) {
-      const target = e.target as HTMLInputElement;
-      this.get_data(target.value);
-    },
-    get_data(data: string = ``) {
-      data = data ? data : this.value;
-      if(this.name === `font-weight`){
-        this.get_font_weight(data);
-        return;
-      }
-      if(this.name === `font-size`){
-        this.get_font_size(data);
-        return;
-      }
-    },
-    get_font_weight(data: string){
-      this.input_type = 'number';
-      this.step = 100;
-      this.max = 900;
-      this.real_data = data;
-      this.full_data = data;
-    },
-    get_font_size(data: string){
-      this.input_type = 'number';
-      this.real_data = data.replace(/[a-z]/g, '') + '';
-      this.full_data = data.replace(/[a-z]/g, '') + this.value.replace(/[0-9]/g, '');
+    change_value(key: string, value: string){
+      this.$emit("change-value", key, value);
     }
   }
 });

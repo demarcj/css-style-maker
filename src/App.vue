@@ -22,18 +22,19 @@
     <main-stage
       :elements="elements"
       :is_ctrl="is_ctrl"
-      @mutant-elements="mutant_elements"
+      @selected-element="set_select"
     ></main-stage>
     <styling-stage
       v-if="show_window.style"
       :selected_element="selected_element"
+      @change-value="change_value"
     ></styling-stage>
   </div>
   <layers
     v-if="show_window.layers"
     :elements="elements"
     :is_ctrl="is_ctrl"
-    @mutant-elements="mutant_elements"
+    @selected-element="set_select"
   ></layers>
   <Footer />
 </div>
@@ -46,6 +47,7 @@
 import { defineComponent } from 'vue';
 import { ElementModel, ElementData, ProjectElement, ProjectHistory } from 'src/interface';
 import { window_types } from 'src/constants';
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import MainStage from 'src/components/layouts/MainStage.vue';
 import Menu from 'src/components/layouts/Menu.vue';
 import Layers from 'src/components/layouts/Layers.vue';
@@ -81,23 +83,14 @@ export default defineComponent({
       },
     }
   },
-  created() {
-    const id = uuid();
-    this.elements[id] = {} as ElementData;
-    this.elements[id].id = id;
-    this.elements[id].name =`example`;
-    this.elements[id].class_name = `example`;
-    this.elements[id].text = `Checkout the 'Style' menu for that special sauce`;
-    this.elements[id].index = 0;
-    this.elements[id].style_list = {
-      'font-size': `32px`
-    };
-    this.elements[id].selected = true;
+  async created() {
+    if(location.pathname === this.$route.path){
+      this.display_elements(this.$route.path);
+    }
     this.default_element.id = uuid();
     this.default_element.action = `Default`;
     this.history_state = this.default_element.id;
     this.default_element.project = JSON.parse(JSON.stringify(this.elements));
-    this.selected_element = this.elements[id];
     this.display_view(this.$route.path);
     this.saved_projects = localStorage.getItem(`projects`) ? JSON.parse(localStorage.getItem(`projects`) as string) : {};
   },
@@ -186,16 +179,18 @@ export default defineComponent({
       const find_select = Object.keys(this.elements).filter(id => this.elements[id].selected);
       if(find_select.length === 1) {
         const selected_element = find_select[0];
-        this.selected_element = {...this.elements[selected_element]};
+        this.selected_element = {} as ElementData;
+        this.selected_element = JSON.parse(JSON.stringify(this.elements[selected_element]));
         return;
       }
       this.selected_element = {} as ElementData;
     },
-    mutant_elements(elements_prop: ElementModel){
+    set_select(elements_prop: ElementModel){
       this.elements = elements_prop;
       const element_key = Object.keys(this.elements).filter(id => this.elements[id].selected);
       if(element_key.length === 1) {
-        this.selected_element = this.elements[element_key[0]];
+        this.selected_element = {} as ElementData;
+        this.selected_element = JSON.parse(JSON.stringify(this.elements[element_key[0]]));
         return;
       }
       this.selected_element = {} as ElementData;
@@ -221,6 +216,26 @@ export default defineComponent({
     },
     display_view(path: string) {
       this.show_page_view = path !== `/` && !path.includes(`css-style-maker`);
+    },
+    async display_elements(path: string) {
+      this.elements = {} as ElementModel;
+      this.selected_element = {} as ElementData;
+      const page = path !== `/` && !path.includes(`css-style-maker`) ? path.substring(1, path.length) : `home`;
+      const db = getFirestore();
+      const colRef = collection(db, page);
+      const data = await getDocs(colRef);
+      data.docs.forEach((doc, index) => {
+        this.elements[doc.id] = doc.data() as ElementData;
+        this.elements[doc.id].id = doc.id;
+        if(index === 0){
+          this.selected_element = this.elements[doc.id];
+        }
+      });
+    },
+    change_value(key: string, value: string){
+      console.log(key, value);
+      this.selected_element.style_list[key] = value;
+      this.elements[this.selected_element.id].style_list[key] = value;
     },
     go_to_history(project: ProjectHistory | undefined) {
       this.elements = project ? JSON.parse(JSON.stringify(project.project)) : JSON.parse(JSON.stringify(this.default_element.project));
@@ -248,6 +263,7 @@ export default defineComponent({
   watch: {
     $route(new_route){
       this.display_view(new_route.path);
+      this.display_elements(new_route.path);
     }
   }
 })

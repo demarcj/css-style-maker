@@ -1,14 +1,5 @@
 <template>
   <view-content title="Font Size">
-    <div>Hello</div>
+    <div>The font-size property sets the font size of the text.</div>
   </view-content>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue';
-
-export default defineComponent({
-  setup() {
-    
-  },
-})
-</script>

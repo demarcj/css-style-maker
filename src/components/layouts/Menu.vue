@@ -189,8 +189,8 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import { ElementModel, ElementData, ProjectElement, ProjectHistory } from 'src/interface';
-import SaveProjectDialog from 'src/components/dialog/SaveProjectDialog.vue'
-import OpenProjectDialog from 'src/components/dialog/OpenProjectDialog.vue'
+import SaveProjectDialog from 'src/components/dialog/SaveProjectDialog.vue';
+import OpenProjectDialog from 'src/components/dialog/OpenProjectDialog.vue';
 export default defineComponent({
   components: { 
     SaveProjectDialog,

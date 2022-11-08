@@ -13,11 +13,11 @@ export interface ElementModel {
 }
 
 export interface ElementData {
-  id: string;
-  name: string;
   class_name: string;
-  text: string;
+  id: string;
   index: number;
-  style_list: {[key:string]: {}};
+  name: string;
   selected: boolean
+  style_list: {[key:string]: {}};
+  text: string;
 }

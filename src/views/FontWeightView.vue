@@ -1,14 +1,5 @@
 <template>
   <view-content title="Font Weight">
-    <div>Hello</div>
+    <div>The font-weight CSS property sets the weight / boldness of the font.</div>
   </view-content>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue';
-
-export default defineComponent({
-  setup() {
-    
-  },
-})
-</script>
